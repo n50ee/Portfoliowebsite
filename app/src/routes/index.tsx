@@ -3,16 +3,20 @@ import { NavBar } from "../components/brand/NavBar";
 import { Footer } from "../components/brand/Footer";
 import { Container } from "../components/brand/Container";
 import { ProjectTile } from "../components/brand/ProjectTile";
+import { ExperienceCard } from "../components/brand/ExperienceCard";
 import { buttonClasses } from "../components/brand/Button";
-import { getHomeProjects } from "../lib/api/content.functions";
+import { getHomeProjects, getAboutData } from "../lib/api/content.functions";
 
 export const Route = createFileRoute("/")({
-  loader: () => getHomeProjects(),
+  loader: async () => {
+    const [projects, profile] = await Promise.all([getHomeProjects(), getAboutData()]);
+    return { projects, experience: profile.experience };
+  },
   component: Index,
 });
 
 function Index() {
-  const projects = Route.useLoaderData();
+  const { projects, experience } = Route.useLoaderData();
 
   return (
     <Container>
@@ -53,6 +57,17 @@ function Index() {
           </p>
         )}
       </section>
+
+      {experience.length > 0 && (
+        <section className="pb-24">
+          <h2 className="mb-6 font-display text-heading-md font-semibold text-ink-900">Work Experience</h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {experience.map((entry, i) => (
+              <ExperienceCard key={i} entry={entry} />
+            ))}
+          </div>
+        </section>
+      )}
 
       <Footer />
     </Container>

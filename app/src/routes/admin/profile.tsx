@@ -3,9 +3,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AdminShell } from "../../components/admin/AdminShell";
 import { Input, Textarea } from "../../components/brand/Field";
 import { Button } from "../../components/brand/Button";
+import { ImageField } from "../../components/admin/ImageField";
 import { requireAdminBeforeLoad } from "../../lib/admin-guard";
 import { adminGetProfile, adminUpdateProfile } from "../../lib/api/admin.functions";
 import type { Profile } from "../../lib/types";
+
+const emptyExperienceRow = { role: "", place: "", years: "", description: "", workType: "", duration: "", logoUrl: "" };
 
 export const Route = createFileRoute("/admin/profile")({
   beforeLoad: ({ location }) => requireAdminBeforeLoad(location.pathname),
@@ -27,7 +30,7 @@ function ProfileEditor() {
   }
 
   function addExperienceRow() {
-    setExperience((rows) => [...rows, { role: "", place: "", years: "" }]);
+    setExperience((rows) => [...rows, { ...emptyExperienceRow }]);
   }
 
   function removeExperienceRow(i: number) {
@@ -69,28 +72,53 @@ function ProfileEditor() {
           <div className="mb-2 text-body-sm font-semibold text-ink-900">Experience</div>
           <div className="flex flex-col gap-3">
             {experience.map((row, i) => (
-              <div key={i} className="grid grid-cols-1 gap-2 rounded-md border border-line p-3 sm:grid-cols-[2fr_2fr_1fr_auto]">
-                <Input
-                  placeholder="Role"
-                  value={row.role}
-                  onChange={(e) => updateExperience(i, "role", e.target.value)}
+              <div key={i} className="flex flex-col gap-2 rounded-md border border-line p-3">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <Input
+                    placeholder="Role"
+                    value={row.role}
+                    onChange={(e) => updateExperience(i, "role", e.target.value)}
+                  />
+                  <Input
+                    placeholder="Company"
+                    value={row.place}
+                    onChange={(e) => updateExperience(i, "place", e.target.value)}
+                  />
+                </div>
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                  <Input
+                    placeholder="Dates, e.g. Jul 2024-Present"
+                    value={row.years}
+                    onChange={(e) => updateExperience(i, "years", e.target.value)}
+                  />
+                  <Input
+                    placeholder="Work type, e.g. Remote"
+                    value={row.workType}
+                    onChange={(e) => updateExperience(i, "workType", e.target.value)}
+                  />
+                  <Input
+                    placeholder="Duration badge, e.g. 3 yrs"
+                    value={row.duration}
+                    onChange={(e) => updateExperience(i, "duration", e.target.value)}
+                  />
+                </div>
+                <Textarea
+                  placeholder="What you did in this role"
+                  rows={2}
+                  value={row.description}
+                  onChange={(e) => updateExperience(i, "description", e.target.value)}
                 />
-                <Input
-                  placeholder="Company"
-                  value={row.place}
-                  onChange={(e) => updateExperience(i, "place", e.target.value)}
-                />
-                <Input
-                  placeholder="2023-Now"
-                  value={row.years}
-                  onChange={(e) => updateExperience(i, "years", e.target.value)}
+                <ImageField
+                  label="Company logo (optional)"
+                  value={row.logoUrl}
+                  onChange={(url) => updateExperience(i, "logoUrl", url)}
                 />
                 <button
                   type="button"
                   onClick={() => removeExperienceRow(i)}
-                  className="self-center rounded-md px-2 py-1 text-caption font-semibold text-critical"
+                  className="self-start text-caption font-semibold text-critical"
                 >
-                  Remove
+                  Remove this role
                 </button>
               </div>
             ))}

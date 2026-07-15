@@ -149,6 +149,10 @@ const profileInputSchema = z.object({
         role: z.string().trim().max(200),
         place: z.string().trim().max(200),
         years: z.string().trim().max(100),
+        description: z.string().trim().max(1000),
+        workType: z.string().trim().max(50),
+        duration: z.string().trim().max(50),
+        logoUrl: z.string().trim().max(2000),
       }),
     )
     .max(50),

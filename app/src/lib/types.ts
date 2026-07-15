@@ -42,9 +42,19 @@ export interface ContactMessage {
   createdAt: string;
 }
 
+export interface ExperienceEntry {
+  role: string;
+  place: string;
+  years: string;
+  description: string;
+  workType: string;
+  duration: string;
+  logoUrl: string;
+}
+
 export interface Profile {
   bio: string;
   skills: string[];
-  experience: { role: string; place: string; years: string }[];
+  experience: ExperienceEntry[];
   resumeUrl: string | null;
 }
