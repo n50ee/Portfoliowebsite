@@ -29,6 +29,8 @@ import { Route as AdminProjectsNewRouteImport } from './routes/admin/projects/ne
 import { Route as AdminProjectsIdRouteImport } from './routes/admin/projects/$id'
 import { Route as ApiAdminLoginRouteImport } from './routes/api/admin/login'
 import { Route as ApiAdminLogoutRouteImport } from './routes/api/admin/logout'
+import { Route as ApiAdminUploadRouteImport } from './routes/api/admin/upload'
+import { Route as ApiMediaKeyRouteImport } from './routes/api/media/$key'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -130,6 +132,16 @@ const ApiAdminLogoutRoute = ApiAdminLogoutRouteImport.update({
   path: '/api/admin/logout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminUploadRoute = ApiAdminUploadRouteImport.update({
+  id: '/api/admin/upload',
+  path: '/api/admin/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMediaKeyRoute = ApiMediaKeyRouteImport.update({
+  id: '/api/media/$key',
+  path: '/api/media/$key',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -152,6 +164,8 @@ export interface FileRoutesByFullPath {
   '/admin/projects/$id': typeof AdminProjectsIdRoute
   '/api/admin/login': typeof ApiAdminLoginRoute
   '/api/admin/logout': typeof ApiAdminLogoutRoute
+  '/api/admin/upload': typeof ApiAdminUploadRoute
+  '/api/media/$key': typeof ApiMediaKeyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -174,6 +188,8 @@ export interface FileRoutesByTo {
   '/admin/projects/$id': typeof AdminProjectsIdRoute
   '/api/admin/login': typeof ApiAdminLoginRoute
   '/api/admin/logout': typeof ApiAdminLogoutRoute
+  '/api/admin/upload': typeof ApiAdminUploadRoute
+  '/api/media/$key': typeof ApiMediaKeyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -197,6 +213,8 @@ export interface FileRoutesById {
   '/admin/projects/$id': typeof AdminProjectsIdRoute
   '/api/admin/login': typeof ApiAdminLoginRoute
   '/api/admin/logout': typeof ApiAdminLogoutRoute
+  '/api/admin/upload': typeof ApiAdminUploadRoute
+  '/api/media/$key': typeof ApiMediaKeyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -221,6 +239,8 @@ export interface FileRouteTypes {
     | '/admin/projects/$id'
     | '/api/admin/login'
     | '/api/admin/logout'
+    | '/api/admin/upload'
+    | '/api/media/$key'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -243,6 +263,8 @@ export interface FileRouteTypes {
     | '/admin/projects/$id'
     | '/api/admin/login'
     | '/api/admin/logout'
+    | '/api/admin/upload'
+    | '/api/media/$key'
   id:
     | '__root__'
     | '/'
@@ -265,6 +287,8 @@ export interface FileRouteTypes {
     | '/admin/projects/$id'
     | '/api/admin/login'
     | '/api/admin/logout'
+    | '/api/admin/upload'
+    | '/api/media/$key'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -288,6 +312,8 @@ export interface RootRouteChildren {
   AdminProjectsIdRoute: typeof AdminProjectsIdRoute
   ApiAdminLoginRoute: typeof ApiAdminLoginRoute
   ApiAdminLogoutRoute: typeof ApiAdminLogoutRoute
+  ApiAdminUploadRoute: typeof ApiAdminUploadRoute
+  ApiMediaKeyRoute: typeof ApiMediaKeyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -432,6 +458,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAdminLogoutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin/upload': {
+      id: '/api/admin/upload'
+      path: '/api/admin/upload'
+      fullPath: '/api/admin/upload'
+      preLoaderRoute: typeof ApiAdminUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/media/$key': {
+      id: '/api/media/$key'
+      path: '/api/media/$key'
+      fullPath: '/api/media/$key'
+      preLoaderRoute: typeof ApiMediaKeyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -456,6 +496,8 @@ const rootRouteChildren: RootRouteChildren = {
   AdminProjectsIdRoute: AdminProjectsIdRoute,
   ApiAdminLoginRoute: ApiAdminLoginRoute,
   ApiAdminLogoutRoute: ApiAdminLogoutRoute,
+  ApiAdminUploadRoute: ApiAdminUploadRoute,
+  ApiMediaKeyRoute: ApiMediaKeyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
