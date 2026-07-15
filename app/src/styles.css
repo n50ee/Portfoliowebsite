@@ -2,10 +2,9 @@
  * (Claude Design project "Ameer Moavia Design System"). Warm-paper canvas +
  * near-black ink + one signature coral accent; quiet, mostly-flat, no
  * gradients. This is a `type: "website"` build — no Quanta/Higgsfield here. */
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
-
-@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap");
 
 @theme {
   --font-display: "Sora", "Manrope", -apple-system, "Segoe UI", sans-serif;

@@ -1,9 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getWebRequest } from "@tanstack/react-start/server";
+import { getRequest } from "@tanstack/react-start/server";
 import { ADMIN_SESSION_COOKIE, readCookie, verifySessionToken } from "./auth.server";
 
 async function isAdminRequest(): Promise<boolean> {
-  const request = getWebRequest();
+  const request = getRequest();
   const cookieHeader = request?.headers.get("cookie") ?? null;
   const token = readCookie(cookieHeader, ADMIN_SESSION_COOKIE);
   return verifySessionToken(token);

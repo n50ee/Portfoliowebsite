@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { assertAdmin } from "../require-admin.server";
+import { assertAdmin } from "../require-admin";
 import * as db from "../db.server";
 
 // ---- Projects ----
@@ -11,7 +11,7 @@ export const adminListProjects = createServerFn({ method: "GET" }).handler(async
 });
 
 export const adminGetProject = createServerFn({ method: "GET" })
-  .inputValidator(z.object({ id: z.number() }))
+  .validator(z.object({ id: z.number() }))
   .handler(async ({ data }) => {
     await assertAdmin();
     return db.getProjectById(data.id);
@@ -36,7 +36,7 @@ const projectInputSchema = z.object({
 });
 
 export const adminCreateProject = createServerFn({ method: "POST" })
-  .inputValidator(projectInputSchema)
+  .validator(projectInputSchema)
   .handler(async ({ data }) => {
     await assertAdmin();
     const id = await db.createProject(data);
@@ -44,7 +44,7 @@ export const adminCreateProject = createServerFn({ method: "POST" })
   });
 
 export const adminUpdateProject = createServerFn({ method: "POST" })
-  .inputValidator(projectInputSchema.extend({ id: z.number() }))
+  .validator(projectInputSchema.extend({ id: z.number() }))
   .handler(async ({ data }) => {
     await assertAdmin();
     const { id, ...rest } = data;
@@ -53,7 +53,7 @@ export const adminUpdateProject = createServerFn({ method: "POST" })
   });
 
 export const adminDeleteProject = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ id: z.number() }))
+  .validator(z.object({ id: z.number() }))
   .handler(async ({ data }) => {
     await assertAdmin();
     await db.deleteProject(data.id);
@@ -68,7 +68,7 @@ export const adminListBlogPosts = createServerFn({ method: "GET" }).handler(asyn
 });
 
 export const adminGetBlogPost = createServerFn({ method: "GET" })
-  .inputValidator(z.object({ id: z.number() }))
+  .validator(z.object({ id: z.number() }))
   .handler(async ({ data }) => {
     await assertAdmin();
     return db.getBlogPostById(data.id);
@@ -84,7 +84,7 @@ const blogPostInputSchema = z.object({
 });
 
 export const adminCreateBlogPost = createServerFn({ method: "POST" })
-  .inputValidator(blogPostInputSchema)
+  .validator(blogPostInputSchema)
   .handler(async ({ data }) => {
     await assertAdmin();
     const id = await db.createBlogPost(data);
@@ -92,7 +92,7 @@ export const adminCreateBlogPost = createServerFn({ method: "POST" })
   });
 
 export const adminUpdateBlogPost = createServerFn({ method: "POST" })
-  .inputValidator(blogPostInputSchema.extend({ id: z.number() }))
+  .validator(blogPostInputSchema.extend({ id: z.number() }))
   .handler(async ({ data }) => {
     await assertAdmin();
     const existing = await db.getBlogPostById(data.id);
@@ -102,7 +102,7 @@ export const adminUpdateBlogPost = createServerFn({ method: "POST" })
   });
 
 export const adminDeleteBlogPost = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ id: z.number() }))
+  .validator(z.object({ id: z.number() }))
   .handler(async ({ data }) => {
     await assertAdmin();
     await db.deleteBlogPost(data.id);
@@ -117,7 +117,7 @@ export const adminListMessages = createServerFn({ method: "GET" }).handler(async
 });
 
 export const adminMarkMessageRead = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ id: z.number(), read: z.boolean() }))
+  .validator(z.object({ id: z.number(), read: z.boolean() }))
   .handler(async ({ data }) => {
     await assertAdmin();
     await db.markMessageRead(data.id, data.read);
@@ -125,7 +125,7 @@ export const adminMarkMessageRead = createServerFn({ method: "POST" })
   });
 
 export const adminDeleteMessage = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ id: z.number() }))
+  .validator(z.object({ id: z.number() }))
   .handler(async ({ data }) => {
     await assertAdmin();
     await db.deleteMessage(data.id);
@@ -155,7 +155,7 @@ const profileInputSchema = z.object({
 });
 
 export const adminUpdateProfile = createServerFn({ method: "POST" })
-  .inputValidator(profileInputSchema)
+  .validator(profileInputSchema)
   .handler(async ({ data }) => {
     await assertAdmin();
     await db.updateProfile(data);

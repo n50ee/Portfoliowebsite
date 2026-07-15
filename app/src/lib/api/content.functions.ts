@@ -14,7 +14,7 @@ export const getHomeProjects = createServerFn({ method: "GET" }).handler(async (
 });
 
 export const getProjectDetail = createServerFn({ method: "GET" })
-  .inputValidator(z.object({ slug: z.string().min(1) }))
+  .validator(z.object({ slug: z.string().min(1) }))
   .handler(async ({ data }) => {
     return getProjectBySlug(data.slug);
   });
@@ -28,7 +28,7 @@ export const getPublishedBlogPosts = createServerFn({ method: "GET" }).handler(a
 });
 
 export const getBlogPostDetail = createServerFn({ method: "GET" })
-  .inputValidator(z.object({ slug: z.string().min(1) }))
+  .validator(z.object({ slug: z.string().min(1) }))
   .handler(async ({ data }) => {
     return getBlogPostBySlug(data.slug);
   });
@@ -40,7 +40,7 @@ const contactSchema = z.object({
 });
 
 export const submitContactMessage = createServerFn({ method: "POST" })
-  .inputValidator(contactSchema)
+  .validator(contactSchema)
   .handler(async ({ data }) => {
     await createMessage(data);
     return { ok: true as const };
