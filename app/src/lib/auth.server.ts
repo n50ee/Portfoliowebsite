@@ -63,11 +63,10 @@ export async function verifySessionToken(token: string | undefined | null): Prom
   if (!payloadB64 || !sigB64) return false;
   try {
     const key = await hmacKey(getSessionSecret());
-    const signatureBytes = fromBase64Url(sigB64);
     const valid = await crypto.subtle.verify(
       "HMAC",
       key,
-      signatureBytes.buffer.slice(signatureBytes.byteOffset, signatureBytes.byteOffset + signatureBytes.byteLength),
+      fromBase64Url(sigB64) as BufferSource,
       new TextEncoder().encode(payloadB64),
     );
     if (!valid) return false;
