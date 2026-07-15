@@ -1,29 +1,49 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
+import { listProjects, listBlogPosts } from "../lib/db.server";
 
-export const Route = createFileRoute('/sitemap.xml')({
+export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async ({ request }) => {
-        const origin = new URL(request.url).origin
-        const today = new Date().toISOString().split('T')[0]
+        const origin = new URL(request.url).origin;
+        const today = new Date().toISOString().split("T")[0];
+
+        const [projects, posts] = await Promise.all([
+          listProjects({ publishedOnly: true }).catch(() => []),
+          listBlogPosts({ publishedOnly: true }).catch(() => []),
+        ]);
+
+        const staticPaths = ["/", "/about", "/blog", "/contact"];
+        const dynamicPaths = [
+          ...projects.map((p) => `/work/${p.slug}`),
+          ...posts.map((p) => `/blog/${p.slug}`),
+        ];
+
+        const urls = [...staticPaths, ...dynamicPaths]
+          .map(
+            (path) => `  <url>
+    <loc>${origin}${path}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>${path === "/" ? "1.0" : "0.7"}</priority>
+  </url>`,
+          )
+          .join("\n");
+
         const xml = [
           '<?xml version="1.0" encoding="UTF-8"?>',
           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-          '  <url>',
-          `    <loc>${origin}/</loc>`,
-          `    <lastmod>${today}</lastmod>`,
-          '    <changefreq>weekly</changefreq>',
-          '    <priority>1.0</priority>',
-          '  </url>',
-          '</urlset>',
-        ].join('\n')
+          urls,
+          "</urlset>",
+        ].join("\n");
+
         return new Response(xml, {
           headers: {
-            'Content-Type': 'application/xml; charset=utf-8',
-            'Cache-Control': 'public, max-age=3600',
+            "Content-Type": "application/xml; charset=utf-8",
+            "Cache-Control": "public, max-age=3600",
           },
-        })
+        });
       },
     },
   },
-})
+});
