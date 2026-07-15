@@ -36,7 +36,6 @@ function Contact() {
     try {
       await submitContactMessage({ data });
       setStatus("sent");
-      e.currentTarget.reset();
     } catch (err) {
       setStatus("error");
       const message = err instanceof Error ? err.message : "Something went wrong. Try again.";
