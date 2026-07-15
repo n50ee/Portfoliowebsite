@@ -10,7 +10,7 @@ import { getAboutData } from "../lib/api/content.functions";
 export const Route = createFileRoute("/about")({
   loader: () => getAboutData(),
   head: () => ({
-    meta: [{ title: "About | Ameer Moavia" }, { name: "description", content: "About Ameer Moavia, product designer." }],
+    meta: [{ title: "About | Ameer Moavia" }, { name: "description", content: "About Ameer Moavia, media ops & partnerships specialist." }],
   }),
   component: About,
 });

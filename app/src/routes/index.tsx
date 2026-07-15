@@ -20,14 +20,14 @@ function Index() {
 
       <section className="py-24 sm:py-24">
         <p className="mb-4 font-body text-caption font-semibold uppercase tracking-eyebrow text-signature-500">
-          Product designer
+          Media ops & partnerships
         </p>
         <h1 className="mb-5 max-w-[720px] font-display text-display-lg font-medium tracking-display text-ink-900">
-          I design products people actually enjoy using.
+          I build partnerships, media operations, and communities that scale.
         </h1>
         <p className="mb-8 max-w-[560px] font-body text-subtitle text-ink-700">
-          Ameer Moavia, currently freelancing on product and interaction design.
-          Selected case studies below.
+          Ameer Moavia. Media operations, partnerships, and community building
+          across government, esports, and tech. Selected work below.
         </p>
         <div className="flex flex-wrap gap-3">
           <Link to="/contact" className={buttonClasses("primary", "md")}>

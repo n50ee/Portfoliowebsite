@@ -17,9 +17,9 @@ import appMetaJson from "../app-meta.json";
 
 declare const __HF_DESIGN_INSPECTOR__: boolean;
 
-const DEFAULT_TITLE = "Ameer Moavia, product designer";
+const DEFAULT_TITLE = "Ameer Moavia, media ops & partnerships";
 const DEFAULT_DESCRIPTION =
-  "Ameer Moavia is a product designer working on interaction, product, and design systems.";
+  "Ameer Moavia works on media operations, partnerships, and community building across government, esports, and tech.";
 
 type AppMeta = {
   og_title?: string | null;
