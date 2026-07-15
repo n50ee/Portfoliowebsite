@@ -1,4 +1,4 @@
-import { createServerFn } from "@tanstack/react-start";
+import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 
 // This file is reachable from client-side code (imported by admin-guard.ts,
@@ -54,12 +54,18 @@ async function verifySessionToken(token: string | undefined): Promise<boolean> {
   }
 }
 
-async function isAdminRequest(): Promise<boolean> {
+// Wrapped with createServerOnlyFn (not a plain function): this keeps the
+// function body — and its `@tanstack/react-start/server` import — out of the
+// client bundle even though this module is reachable from client-side code
+// (admin-guard.ts calls `checkAdminSession` directly). A plain async function
+// here would leave the import-protection plugin unable to prove it's dead
+// code on the client side.
+const isAdminRequest = createServerOnlyFn(async (): Promise<boolean> => {
   const request = getRequest();
   const cookieHeader = request?.headers.get("cookie") ?? null;
   const token = readCookie(cookieHeader, ADMIN_SESSION_COOKIE);
   return verifySessionToken(token);
-}
+});
 
 /** Call from a route's `beforeLoad` to gate every `/admin/**` page server-side. */
 export const checkAdminSession = createServerFn({ method: "GET" }).handler(async () => {
@@ -71,8 +77,8 @@ export const checkAdminSession = createServerFn({ method: "GET" }).handler(async
  * FIRST. The route-level `beforeLoad` guard is for UX only — this is the
  * actual safety boundary, since server functions can be invoked directly.
  */
-export async function assertAdmin(): Promise<void> {
+export const assertAdmin = createServerOnlyFn(async (): Promise<void> => {
   if (!(await isAdminRequest())) {
     throw new Error("unauthorized");
   }
-}
+});
