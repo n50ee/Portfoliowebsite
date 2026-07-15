@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Input, Textarea } from "../brand/Field";
 import { Button } from "../brand/Button";
+import { ImageField } from "./ImageField";
+import { GalleryField } from "./GalleryField";
 import type { Project } from "../../lib/types";
 
 export interface ProjectFormValues {
@@ -13,6 +15,7 @@ export interface ProjectFormValues {
   themeAccent: string | null;
   themeTint: string | null;
   imageUrl: string | null;
+  gallery: string[];
   role: string | null;
   timeline: string | null;
   team: string | null;
@@ -32,6 +35,7 @@ function toFormValues(project?: Project | null): ProjectFormValues {
     themeAccent: project?.themeAccent ?? "",
     themeTint: project?.themeTint ?? "",
     imageUrl: project?.imageUrl ?? "",
+    gallery: project?.gallery ?? [],
     role: project?.role ?? "",
     timeline: project?.timeline ?? "",
     team: project?.team ?? "",
@@ -116,10 +120,15 @@ export function ProjectForm({
         <Input label="Timeline" value={values.timeline ?? ""} onChange={(e) => set("timeline", e.target.value)} />
         <Input label="Team" value={values.team ?? ""} onChange={(e) => set("team", e.target.value)} />
       </div>
-      <Input
-        label="Image URL (paste a link, or leave blank for a placeholder)"
+      <ImageField
+        label="Hero image (shown at the top of the case study)"
         value={values.imageUrl ?? ""}
-        onChange={(e) => set("imageUrl", e.target.value)}
+        onChange={(url) => set("imageUrl", url)}
+      />
+      <GalleryField
+        label="Photo gallery (shown below the hero image)"
+        value={values.gallery}
+        onChange={(urls) => set("gallery", urls)}
       />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Input

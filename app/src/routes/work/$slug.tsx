@@ -66,6 +66,16 @@ function CaseStudy() {
             </>
           )}
         </div>
+
+        {project.gallery.length > 0 && (
+          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
+            {project.gallery.map((url) => (
+              <div key={url} className="aspect-square overflow-hidden rounded-lg border border-line-soft">
+                <img src={url} alt="" className="h-full w-full object-cover" />
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       <section className="grid grid-cols-1 gap-12 pb-24 md:grid-cols-[2fr_1fr]">

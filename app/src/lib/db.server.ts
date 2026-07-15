@@ -30,6 +30,7 @@ type ProjectRow = {
   theme_accent: string | null;
   theme_tint: string | null;
   image_url: string | null;
+  gallery: string;
   role: string | null;
   timeline: string | null;
   team: string | null;
@@ -52,6 +53,7 @@ function mapProject(row: ProjectRow): Project {
     themeAccent: row.theme_accent,
     themeTint: row.theme_tint,
     imageUrl: row.image_url,
+    gallery: parseJsonArray(row.gallery),
     role: row.role,
     timeline: row.timeline,
     team: row.team,
@@ -94,6 +96,7 @@ export interface ProjectInput {
   themeAccent: string | null;
   themeTint: string | null;
   imageUrl: string | null;
+  gallery: string[];
   role: string | null;
   timeline: string | null;
   team: string | null;
@@ -105,8 +108,8 @@ export interface ProjectInput {
 export async function createProject(input: ProjectInput): Promise<number> {
   const res = await db()
     .prepare(
-      `INSERT INTO projects (slug, title, client, description, body, tags, theme_accent, theme_tint, image_url, role, timeline, team, status, sort_order, published, updated_at)
-       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, datetime('now'))`,
+      `INSERT INTO projects (slug, title, client, description, body, tags, theme_accent, theme_tint, image_url, gallery, role, timeline, team, status, sort_order, published, updated_at)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, datetime('now'))`,
     )
     .bind(
       input.slug,
@@ -118,6 +121,7 @@ export async function createProject(input: ProjectInput): Promise<number> {
       input.themeAccent,
       input.themeTint,
       input.imageUrl,
+      JSON.stringify(input.gallery),
       input.role,
       input.timeline,
       input.team,
@@ -132,8 +136,8 @@ export async function createProject(input: ProjectInput): Promise<number> {
 export async function updateProject(id: number, input: ProjectInput): Promise<void> {
   await db()
     .prepare(
-      `UPDATE projects SET slug=?1, title=?2, client=?3, description=?4, body=?5, tags=?6, theme_accent=?7, theme_tint=?8, image_url=?9, role=?10, timeline=?11, team=?12, status=?13, sort_order=?14, published=?15, updated_at=datetime('now')
-       WHERE id=?16`,
+      `UPDATE projects SET slug=?1, title=?2, client=?3, description=?4, body=?5, tags=?6, theme_accent=?7, theme_tint=?8, image_url=?9, gallery=?10, role=?11, timeline=?12, team=?13, status=?14, sort_order=?15, published=?16, updated_at=datetime('now')
+       WHERE id=?17`,
     )
     .bind(
       input.slug,
@@ -145,6 +149,7 @@ export async function updateProject(id: number, input: ProjectInput): Promise<vo
       input.themeAccent,
       input.themeTint,
       input.imageUrl,
+      JSON.stringify(input.gallery),
       input.role,
       input.timeline,
       input.team,

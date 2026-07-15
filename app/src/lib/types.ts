@@ -9,6 +9,7 @@ export interface Project {
   themeAccent: string | null;
   themeTint: string | null;
   imageUrl: string | null;
+  gallery: string[];
   role: string | null;
   timeline: string | null;
   team: string | null;
