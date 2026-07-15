@@ -12,10 +12,12 @@ export const Route = createFileRoute("/api/media/$key")({
         if (!object) return new Response("Not found", { status: 404 });
 
         const headers = new Headers();
-        object.writeHttpMetadata(headers);
+        if (object.httpMetadata?.contentType) {
+          headers.set("content-type", object.httpMetadata.contentType);
+        }
         headers.set("etag", object.httpEtag);
         headers.set("Cache-Control", "public, max-age=31536000, immutable");
-        return new Response(object.body, { headers });
+        return new Response(object.body as unknown as ReadableStream, { headers });
       },
     },
   },
