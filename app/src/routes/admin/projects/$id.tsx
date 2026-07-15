@@ -1,8 +1,11 @@
 import { createFileRoute, notFound, useNavigate } from "@tanstack/react-router";
-import { ProjectForm, type ProjectFormValues } from "../../../../components/admin/ProjectForm";
-import { adminGetProject, adminUpdateProject } from "../../../../lib/api/admin.functions";
+import { AdminShell } from "../../../components/admin/AdminShell";
+import { ProjectForm, type ProjectFormValues } from "../../../components/admin/ProjectForm";
+import { requireAdminBeforeLoad } from "../../../lib/admin-guard";
+import { adminGetProject, adminUpdateProject } from "../../../lib/api/admin.functions";
 
-export const Route = createFileRoute("/admin/_authed/projects/$id")({
+export const Route = createFileRoute("/admin/projects/$id")({
+  beforeLoad: ({ location }) => requireAdminBeforeLoad(location.pathname),
   loader: async ({ params }) => {
     const project = await adminGetProject({ data: { id: Number(params.id) } });
     if (!project) throw notFound();
@@ -21,9 +24,9 @@ function EditProject() {
   }
 
   return (
-    <div>
+    <AdminShell>
       <h1 className="mb-6 font-display text-heading-lg font-semibold text-ink-900">Edit project</h1>
       <ProjectForm project={project} onSubmit={handleSubmit} submitLabel="Save changes" />
-    </div>
+    </AdminShell>
   );
 }

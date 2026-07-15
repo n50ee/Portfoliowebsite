@@ -1,16 +1,6 @@
-import { createFileRoute, Outlet, Link, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
+import type { ReactNode } from "react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { clsx } from "clsx";
-import { checkAdminSession } from "../../lib/require-admin.server";
-
-export const Route = createFileRoute("/admin/_authed")({
-  beforeLoad: async ({ location }) => {
-    const { authorized } = await checkAdminSession();
-    if (!authorized) {
-      throw redirect({ to: "/admin/login", search: { redirect: location.pathname } });
-    }
-  },
-  component: AdminLayout,
-});
 
 const navItems = [
   { to: "/admin", label: "Dashboard" },
@@ -20,7 +10,7 @@ const navItems = [
   { to: "/admin/profile", label: "Profile" },
 ] as const;
 
-function AdminLayout() {
+export function AdminShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -64,9 +54,7 @@ function AdminLayout() {
             ← View site
           </Link>
         </aside>
-        <main className="min-w-0 flex-1 pb-16">
-          <Outlet />
-        </main>
+        <main className="min-w-0 flex-1 pb-16">{children}</main>
       </div>
     </div>
   );

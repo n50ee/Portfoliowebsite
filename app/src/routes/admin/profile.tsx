@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Input, Textarea } from "../../../components/brand/Field";
-import { Button } from "../../../components/brand/Button";
-import { adminGetProfile, adminUpdateProfile } from "../../../lib/api/admin.functions";
-import type { Profile } from "../../../lib/types";
+import { AdminShell } from "../../components/admin/AdminShell";
+import { Input, Textarea } from "../../components/brand/Field";
+import { Button } from "../../components/brand/Button";
+import { requireAdminBeforeLoad } from "../../lib/admin-guard";
+import { adminGetProfile, adminUpdateProfile } from "../../lib/api/admin.functions";
+import type { Profile } from "../../lib/types";
 
-export const Route = createFileRoute("/admin/_authed/profile")({
+export const Route = createFileRoute("/admin/profile")({
+  beforeLoad: ({ location }) => requireAdminBeforeLoad(location.pathname),
   loader: () => adminGetProfile(),
   component: ProfileEditor,
 });
@@ -51,7 +54,7 @@ function ProfileEditor() {
   }
 
   return (
-    <div>
+    <AdminShell>
       <h1 className="mb-6 font-display text-heading-lg font-semibold text-ink-900">About page content</h1>
       <form onSubmit={handleSubmit} className="flex max-w-[640px] flex-col gap-5">
         <Textarea label="Bio" rows={6} value={bio} onChange={(e) => setBio(e.target.value)} />
@@ -106,6 +109,6 @@ function ProfileEditor() {
           {saving ? "Saving…" : "Save changes"}
         </Button>
       </form>
-    </div>
+    </AdminShell>
   );
 }

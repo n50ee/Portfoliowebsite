@@ -1,8 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Card } from "../../../components/brand/Card";
-import { adminListProjects, adminListBlogPosts, adminListMessages } from "../../../lib/api/admin.functions";
+import { AdminShell } from "../../components/admin/AdminShell";
+import { Card } from "../../components/brand/Card";
+import { requireAdminBeforeLoad } from "../../lib/admin-guard";
+import { adminListProjects, adminListBlogPosts, adminListMessages } from "../../lib/api/admin.functions";
 
-export const Route = createFileRoute("/admin/_authed/")({
+export const Route = createFileRoute("/admin/")({
+  beforeLoad: ({ location }) => requireAdminBeforeLoad(location.pathname),
   loader: async () => {
     const [projects, posts, messages] = await Promise.all([
       adminListProjects(),
@@ -28,7 +31,7 @@ function AdminDashboard() {
   ] as const;
 
   return (
-    <div>
+    <AdminShell>
       <h1 className="mb-6 font-display text-heading-lg font-semibold text-ink-900">Dashboard</h1>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {cards.map((c) => (
@@ -40,6 +43,6 @@ function AdminDashboard() {
           </Link>
         ))}
       </div>
-    </div>
+    </AdminShell>
   );
 }

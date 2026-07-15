@@ -1,9 +1,12 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { Card } from "../../../../components/brand/Card";
-import { Badge } from "../../../../components/brand/Badge";
-import { adminDeleteMessage, adminListMessages, adminMarkMessageRead } from "../../../../lib/api/admin.functions";
+import { AdminShell } from "../../../components/admin/AdminShell";
+import { Card } from "../../../components/brand/Card";
+import { Badge } from "../../../components/brand/Badge";
+import { requireAdminBeforeLoad } from "../../../lib/admin-guard";
+import { adminDeleteMessage, adminListMessages, adminMarkMessageRead } from "../../../lib/api/admin.functions";
 
-export const Route = createFileRoute("/admin/_authed/messages/")({
+export const Route = createFileRoute("/admin/messages/")({
+  beforeLoad: ({ location }) => requireAdminBeforeLoad(location.pathname),
   loader: () => adminListMessages(),
   component: MessagesList,
 });
@@ -28,7 +31,7 @@ function MessagesList() {
   }
 
   return (
-    <div>
+    <AdminShell>
       <h1 className="mb-6 font-display text-heading-lg font-semibold text-ink-900">Messages</h1>
 
       {messages.length === 0 ? (
@@ -68,6 +71,6 @@ function MessagesList() {
           ))}
         </div>
       )}
-    </div>
+    </AdminShell>
   );
 }
