@@ -146,11 +146,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 // Runs before hydration/paint so the site never flashes the wrong theme.
 const THEME_INIT_SCRIPT = `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();`;
 
+// Runs before hydration/paint so a saved accent color never flashes in.
+const ACCENT_INIT_SCRIPT = `(function(){try{var c=localStorage.getItem('accent-color');if(c){var s=document.documentElement.style;s.setProperty('--color-signature-500',c);s.setProperty('--color-signature-600','color-mix(in srgb, '+c+' 82%, black)');s.setProperty('--color-signature-100','color-mix(in srgb, '+c+' 18%, white)');}}catch(e){}})();`;
+
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: ACCENT_INIT_SCRIPT }} />
         <HeadContent />
       </head>
       <body className="bg-paper text-ink-900 antialiased">
