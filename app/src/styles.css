@@ -417,6 +417,112 @@
   100% { opacity: 1; transform: translateY(0); }
 }
 
+/* Floating social menu — adapted from a Uiverse.io radial toggle. Fixed to
+ * the bottom-right corner; the + fans out to real Instagram/LinkedIn icons. */
+.social-menu {
+  --toggle-color: #1a1a1a;
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 200;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  pointer-events: none;
+}
+
+.social-menu .toggle {
+  width: 60px;
+  height: 60px;
+  background-color: var(--toggle-color);
+  color: #fff;
+  text-align: center;
+  line-height: 60px;
+  border-radius: 50%;
+  font-size: 1.6em;
+  font-weight: 600;
+  z-index: 999;
+  position: absolute;
+  transition: transform 1.2s ease-in-out;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: inset -2px -2px 4px 0 #0006, inset 2px 2px 4px 0 #0008;
+}
+
+.social-menu .toggle::before {
+  content: "";
+  position: absolute;
+  inset: 0px;
+  background-color: var(--toggle-color);
+  z-index: -1;
+  filter: blur(30px) saturate(900%) opacity(0.5);
+}
+
+.social-menu .social-menu-input {
+  appearance: none;
+  visibility: hidden;
+  position: absolute;
+}
+
+.social-menu .social-menu-input:checked + .toggle {
+  transform: rotate(315deg);
+}
+
+.social-menu .social-menu-input:checked ~ .circle-box {
+  transform: rotate(calc(360deg / 8 * var(--i)));
+}
+
+.social-menu .circle-box {
+  position: absolute;
+  left: 0;
+  pointer-events: none;
+  transition: 0.5s;
+  transform-origin: 100px;
+  transition-delay: calc(0.1s * var(--i));
+  transform: rotate(0deg) translateX(70px);
+}
+
+.social-menu .anchor {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  text-decoration: none;
+  position: relative;
+  pointer-events: auto;
+  transform: rotate(calc(360deg / -8 * var(--i)));
+}
+
+.social-menu .anchor-linkedin {
+  background: linear-gradient(45deg, #0a66c2, #0e76a8);
+}
+
+.social-menu .anchor-instagram {
+  background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
+}
+
+.social-menu .anchor::before {
+  content: "";
+  position: absolute;
+  inset: 0px;
+  background-image: inherit;
+  border-radius: inherit;
+  z-index: -1;
+  filter: blur(30px) saturate(900%);
+  transition: inset 0.2s ease;
+}
+
+.social-menu .anchor:hover::before {
+  inset: -7px;
+}
+
 @media only screen and (max-width: 480px) {
   .hire-me-container {
     transform: scale(0.7);
