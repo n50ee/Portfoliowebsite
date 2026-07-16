@@ -1,13 +1,13 @@
 /**
- * Small decorative sun/flame icon, adapted from a Uiverse.io component (by
+ * Decorative sun/flame icon, adapted from a Uiverse.io component (by
  * Javierrocadev). The original is a 256px card; scaled down to sit next to
  * the theme toggle in the nav while keeping every proportion and the hover
  * glow animation intact.
  */
 export function SunGlowIcon() {
   return (
-    <div className="h-8 w-8 shrink-0 overflow-hidden rounded-md" aria-hidden="true">
-      <div className="h-64 w-64 origin-top-left" style={{ transform: "scale(0.125)" }}>
+    <div className="h-32 w-32 shrink-0 overflow-hidden rounded-xl" aria-hidden="true">
+      <div className="h-64 w-64 origin-top-left" style={{ transform: "scale(0.5)" }}>
         <div className="group relative flex h-64 w-64 items-center justify-center overflow-hidden rounded-xl bg-neutral-800">
           <div className="absolute bottom-8 h-24 w-24 bg-red-300">
             <div className="absolute h-24 w-24 shadow-2xl duration-500 [box-shadow:0px_-75px_55px_-30px_#262626] group-hover:[box-shadow:0px_-75px_95px_0px_#FDE047]">
