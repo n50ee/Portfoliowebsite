@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { NavBar } from "../components/brand/NavBar";
 import { Footer } from "../components/brand/Footer";
 import { Container } from "../components/brand/Container";
@@ -6,6 +7,12 @@ import { ProjectTile } from "../components/brand/ProjectTile";
 import { ExperienceCard } from "../components/brand/ExperienceCard";
 import { buttonClasses } from "../components/brand/Button";
 import { getHomeProjects, getAboutData } from "../lib/api/content.functions";
+
+// WebGL ([W]) component: lazy-loaded and mount-gated so Three.js is never
+// imported or evaluated during SSR.
+const Globe3DDemo = lazy(() =>
+  import("../components/demo/Globe3DDemo").then((m) => ({ default: m.Globe3DDemo })),
+);
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -17,6 +24,8 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const { projects, experience } = Route.useLoaderData();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <Container>
@@ -56,6 +65,17 @@ function Index() {
             No projects published yet. Add some from the admin dashboard.
           </p>
         )}
+      </section>
+
+      <section className="flex flex-col items-center pb-24 text-center">
+        <h2 className="mb-6 font-display text-heading-md font-semibold text-ink-900">Reach</h2>
+        <div className="w-full max-w-md">
+          {mounted && (
+            <Suspense fallback={<div style={{ aspectRatio: "1 / 1" }} />}>
+              <Globe3DDemo />
+            </Suspense>
+          )}
+        </div>
       </section>
 
       {experience.length > 0 && (
