@@ -102,14 +102,9 @@ export function Carousel({ items }: { items: ReactNode[] }) {
   );
 }
 
-// Grace period between leaving the card/modal and actually closing, so
-// moving the mouse from the card down into the modal doesn't snap it shut.
-const HOVER_CLOSE_DELAY_MS = 250;
-
 export function Card({ card, index }: { card: CarouselCard; index: number }) {
   const [open, setOpen] = useState(false);
   const { onCardClose } = useContext(CarouselContext);
-  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -128,29 +123,7 @@ export function Card({ card, index }: { card: CarouselCard; index: number }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  useEffect(() => {
-    return () => {
-      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
-    };
-  }, []);
-
-  function cancelScheduledClose() {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = undefined;
-    }
-  }
-
-  function scheduleClose() {
-    cancelScheduledClose();
-    closeTimeoutRef.current = setTimeout(() => {
-      setOpen(false);
-      onCardClose(index);
-    }, HOVER_CLOSE_DELAY_MS);
-  }
-
   function handleClose() {
-    cancelScheduledClose();
     setOpen(false);
     onCardClose(index);
   }
@@ -161,11 +134,7 @@ export function Card({ card, index }: { card: CarouselCard; index: number }) {
     <>
       <AnimatePresence>
         {open && (
-          <div
-            className="fixed inset-0 z-[300] overflow-y-auto"
-            onMouseEnter={cancelScheduledClose}
-            onMouseLeave={scheduleClose}
-          >
+          <div className="fixed inset-0 z-[300] overflow-y-auto">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -204,11 +173,6 @@ export function Card({ card, index }: { card: CarouselCard; index: number }) {
         type="button"
         layoutId={layoutId}
         onClick={() => setOpen(true)}
-        onMouseEnter={() => {
-          cancelScheduledClose();
-          setOpen(true);
-        }}
-        onMouseLeave={scheduleClose}
         className="relative flex h-72 w-64 shrink-0 flex-col justify-end overflow-hidden rounded-2xl border border-line-soft text-left sm:h-80 sm:w-72"
         style={{ background: card.src ? undefined : card.tint }}
       >
