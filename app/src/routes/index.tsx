@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { NavBar } from "../components/brand/NavBar";
 import { Footer } from "../components/brand/Footer";
 import { Container } from "../components/brand/Container";
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const { projects, experience } = Route.useLoaderData();
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
     <Container>
@@ -47,8 +49,13 @@ function Index() {
         <h2 className="mb-6 font-display text-heading-md font-semibold text-ink-900">Selected work</h2>
         {projects.length > 0 ? (
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
-              <ProjectTile key={project.id} project={project} />
+            {projects.map((project, i) => (
+              <ProjectTile
+                key={project.id}
+                project={project}
+                dimmed={hoveredIndex !== null && hoveredIndex !== i}
+                onHoverChange={(hovered) => setHoveredIndex(hovered ? i : null)}
+              />
             ))}
           </div>
         ) : (
