@@ -1,10 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createSessionToken, getAdminPassword, safeEqual, sessionCookieHeader } from "../../../lib/auth.server";
+import { checkLoginThrottle, recordFailedLogin, resetLoginThrottle } from "../../../lib/db.server";
 
 export const Route = createFileRoute("/api/admin/login")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        const throttle = await checkLoginThrottle();
+        if (!throttle.allowed) {
+          return Response.json(
+            {
+              ok: false,
+              error: `Too many failed attempts. Try again in ${Math.ceil(throttle.retryAfterSeconds / 60)} minute(s).`,
+            },
+            { status: 429 },
+          );
+        }
+
         const body = await request.json().catch(() => null);
         const password = typeof body?.password === "string" ? body.password : "";
 
@@ -17,9 +29,11 @@ export const Route = createFileRoute("/api/admin/login")({
         }
 
         if (!password || !safeEqual(password, adminPassword)) {
-          return Response.json({ ok: false, error: "Incorrect password." }, { status: 401 });
+          await recordFailedLogin();
+          return Response.json({ ok: false, error: "Incorrect code." }, { status: 401 });
         }
 
+        await resetLoginThrottle();
         const token = await createSessionToken();
         return Response.json(
           { ok: true },

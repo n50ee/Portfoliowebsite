@@ -352,3 +352,43 @@ export async function updateProfile(input: Profile): Promise<void> {
     .bind(input.bio, JSON.stringify(input.skills), JSON.stringify(input.experience), input.resumeUrl)
     .run();
 }
+
+// ---- Login throttle (brute-force protection for /api/admin/login) ----
+
+const MAX_FAILED_ATTEMPTS = 8;
+const LOCKOUT_MINUTES = 15;
+
+export async function checkLoginThrottle(): Promise<{ allowed: boolean; retryAfterSeconds: number }> {
+  const row = await db()
+    .prepare("SELECT locked_until FROM login_throttle WHERE id = 1")
+    .first<{ locked_until: string | null }>();
+  if (!row?.locked_until) return { allowed: true, retryAfterSeconds: 0 };
+
+  const lockedUntil = new Date(row.locked_until.replace(" ", "T") + "Z").getTime();
+  const now = Date.now();
+  if (now >= lockedUntil) return { allowed: true, retryAfterSeconds: 0 };
+  return { allowed: false, retryAfterSeconds: Math.ceil((lockedUntil - now) / 1000) };
+}
+
+export async function recordFailedLogin(): Promise<void> {
+  const row = await db()
+    .prepare("SELECT failed_count FROM login_throttle WHERE id = 1")
+    .first<{ failed_count: number }>();
+  const failedCount = (row?.failed_count ?? 0) + 1;
+
+  if (failedCount >= MAX_FAILED_ATTEMPTS) {
+    await db()
+      .prepare(
+        `UPDATE login_throttle SET failed_count = 0, locked_until = datetime('now', '+${LOCKOUT_MINUTES} minutes') WHERE id = 1`,
+      )
+      .run();
+  } else {
+    await db().prepare("UPDATE login_throttle SET failed_count = ?1 WHERE id = 1").bind(failedCount).run();
+  }
+}
+
+export async function resetLoginThrottle(): Promise<void> {
+  await db()
+    .prepare("UPDATE login_throttle SET failed_count = 0, locked_until = NULL WHERE id = 1")
+    .run();
+}
