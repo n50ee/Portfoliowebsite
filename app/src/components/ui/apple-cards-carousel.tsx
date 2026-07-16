@@ -109,7 +109,7 @@ const HOVER_CLOSE_DELAY_MS = 250;
 export function Card({ card, index }: { card: CarouselCard; index: number }) {
   const [open, setOpen] = useState(false);
   const { onCardClose } = useContext(CarouselContext);
-  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
