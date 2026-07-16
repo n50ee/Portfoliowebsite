@@ -64,12 +64,17 @@ export function BlogPostForm({
         />
       </div>
       <Textarea
-        label="Excerpt (shown in the list page)"
+        label="Excerpt (shown in the list page, and as the intro line on the article itself)"
         rows={2}
         value={values.excerpt}
         onChange={(e) => set("excerpt", e.target.value)}
       />
-      <Textarea label="Body" rows={12} value={values.body} onChange={(e) => set("body", e.target.value)} />
+      <Textarea
+        label='Body (Markdown: # headings, > quotes, ![caption](image-url "caption text"), lists. A paragraph starting with "-- " renders as a quote attribution. Wrap a section in <div class="callout">...</div> for a highlighted box.)'
+        rows={14}
+        value={values.body}
+        onChange={(e) => set("body", e.target.value)}
+      />
       <Input
         label="Cover image URL (optional)"
         value={values.coverImageUrl ?? ""}

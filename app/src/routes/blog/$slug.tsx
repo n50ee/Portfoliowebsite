@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { NavBar } from "../../components/brand/NavBar";
 import { Footer } from "../../components/brand/Footer";
 import { Container } from "../../components/brand/Container";
+import { ArticleBody } from "../../components/brand/ArticleBody";
 import { getBlogPostDetail } from "../../lib/api/content.functions";
 
 export const Route = createFileRoute("/blog/$slug")({
@@ -38,8 +39,14 @@ function BlogPost() {
         <h1 className="mb-8 max-w-[760px] font-display text-display-lg font-medium tracking-display text-ink-900">
           {post.title}
         </h1>
-        <div className="max-w-[760px] whitespace-pre-line font-body text-body leading-body text-ink-700">
-          {post.body}
+        <div className="max-w-[760px]">
+          {post.excerpt && (
+            <>
+              <p className="font-body text-subtitle leading-body text-ink-700">{post.excerpt}</p>
+              <hr className="my-8 border-line-soft" />
+            </>
+          )}
+          <ArticleBody markdown={post.body} />
         </div>
       </article>
 
