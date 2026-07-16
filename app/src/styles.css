@@ -88,6 +88,39 @@
   20%, 50% { opacity: 0; }
 }
 
+/* Dark mode: same token names, overridden values. Every component already
+ * reads colors through these variables (bg-paper, text-ink-900, etc.), so
+ * flipping this block is enough to re-theme the whole site with no
+ * per-component dark: classes needed. Toggled via [data-theme] on <html>. */
+[data-theme="dark"] {
+  --color-paper: oklch(17% 0.01 260);
+  --color-paper-raised: oklch(21% 0.011 260);
+  --color-paper-sunken: oklch(14% 0.009 260);
+
+  --color-ink-900: oklch(96% 0.004 90);
+  --color-ink-700: oklch(85% 0.006 90);
+  --color-ink-500: oklch(65% 0.008 90);
+  --color-ink-300: oklch(42% 0.008 90);
+
+  --color-line: oklch(32% 0.01 260);
+  --color-line-soft: oklch(25% 0.008 260);
+
+  --color-signature-500: oklch(70% 0.18 35);
+  --color-signature-600: oklch(78% 0.17 35);
+  --color-signature-100: oklch(28% 0.05 35);
+
+  --color-success-bg: oklch(24% 0.06 149);
+  --color-success-fg: oklch(85% 0.1 149);
+  --color-warning-bg: oklch(26% 0.07 85);
+  --color-warning-fg: oklch(85% 0.12 85);
+  --color-critical-bg: oklch(26% 0.08 25);
+  --color-critical-fg: oklch(85% 0.14 25);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
 @layer base {
   html {
     background-color: var(--color-paper);
@@ -99,6 +132,7 @@
     background-color: var(--color-paper);
     color: var(--color-ink-900);
     font-family: var(--font-body);
+    transition: background-color 200ms ease-out, color 200ms ease-out;
   }
 
   * {
@@ -139,4 +173,41 @@
 
 .callout p:last-child {
   margin-bottom: 0;
+}
+
+/* Dark mode toggle — adapted from a Uiverse.io checkbox (by Nawsome): a
+ * diagonal panel wipes across to reveal/hide the dark fill. */
+.theme-toggle {
+  display: block;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border: 3px solid transparent;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-paper);
+  box-shadow: 0 0 0 2px var(--color-ink-900);
+}
+
+.theme-toggle > div {
+  width: 60px;
+  height: 60px;
+  background-color: var(--color-ink-900);
+  top: -52px;
+  left: -52px;
+  position: absolute;
+  transform: rotateZ(45deg);
+  transition: 300ms ease;
+}
+
+.theme-toggle input[type="checkbox"]:checked + div {
+  left: -10px;
+  top: -10px;
+}
+
+.theme-toggle input[type="checkbox"] {
+  position: absolute;
+  left: 50px;
+  visibility: hidden;
 }
