@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ThemeToggle } from "./ThemeToggle";
+import { SunGlowIcon } from "./SunGlowIcon";
 
 const links = [
   { to: "/", label: "Work" },
@@ -27,6 +28,7 @@ export function NavBar() {
             {l.label}
           </Link>
         ))}
+        <SunGlowIcon />
         <ThemeToggle />
       </nav>
     </header>
