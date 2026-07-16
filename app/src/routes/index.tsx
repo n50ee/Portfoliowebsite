@@ -7,6 +7,7 @@ import { Tag } from "../components/brand/Tag";
 import { buttonClasses } from "../components/brand/Button";
 import { Carousel, Card as CarouselCard } from "../components/ui/apple-cards-carousel";
 import { HireMeCard } from "../components/brand/HireMeCard";
+import { CategoryGrid } from "../components/brand/CategoryGrid";
 import { getHomeProjects, getAboutData } from "../lib/api/content.functions";
 import type { Project } from "../lib/types";
 
@@ -90,6 +91,11 @@ function Index() {
             No projects published yet. Add some from the admin dashboard.
           </p>
         )}
+      </section>
+
+      <section className="pb-24">
+        <h2 className="mb-6 font-display text-heading-md font-semibold text-ink-900">Focus areas</h2>
+        <CategoryGrid />
       </section>
 
       {experience.length > 0 && (
