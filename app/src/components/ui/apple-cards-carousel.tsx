@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { cn } from "../../lib/utils";
 
 export interface CarouselCard {
   category: string;
@@ -19,10 +20,14 @@ export interface CarouselCard {
 
 interface CarouselContextValue {
   onCardClose: (index: number) => void;
+  hoveredIndex: number | null;
+  setHoveredIndex: (index: number | null) => void;
 }
 
 const CarouselContext = createContext<CarouselContextValue>({
   onCardClose: () => {},
+  hoveredIndex: null,
+  setHoveredIndex: () => {},
 });
 
 const CARD_WIDTH = 288;
@@ -32,6 +37,7 @@ export function Carousel({ items }: { items: ReactNode[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const checkScrollability = () => {
     const el = containerRef.current;
@@ -58,7 +64,7 @@ export function Carousel({ items }: { items: ReactNode[] }) {
   };
 
   return (
-    <CarouselContext.Provider value={{ onCardClose }}>
+    <CarouselContext.Provider value={{ onCardClose, hoveredIndex, setHoveredIndex }}>
       <div className="relative w-full">
         <div
           ref={containerRef}
@@ -104,7 +110,8 @@ export function Carousel({ items }: { items: ReactNode[] }) {
 
 export function Card({ card, index }: { card: CarouselCard; index: number }) {
   const [open, setOpen] = useState(false);
-  const { onCardClose } = useContext(CarouselContext);
+  const { onCardClose, hoveredIndex, setHoveredIndex } = useContext(CarouselContext);
+  const dimmed = hoveredIndex !== null && hoveredIndex !== index;
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -173,7 +180,12 @@ export function Card({ card, index }: { card: CarouselCard; index: number }) {
         type="button"
         layoutId={layoutId}
         onClick={() => setOpen(true)}
-        className="relative flex h-72 w-64 shrink-0 flex-col justify-end overflow-hidden rounded-2xl border border-line-soft text-left sm:h-80 sm:w-72"
+        onMouseEnter={() => setHoveredIndex(index)}
+        onMouseLeave={() => setHoveredIndex(null)}
+        className={cn(
+          "relative flex h-72 w-64 shrink-0 flex-col justify-end overflow-hidden rounded-2xl border border-line-soft text-left transition-[opacity,filter] duration-300 ease-out sm:h-80 sm:w-72",
+          dimmed && "opacity-50 blur-[1px]",
+        )}
         style={{ background: card.src ? undefined : card.tint }}
       >
         {card.src && <img src={card.src} alt="" className="absolute inset-0 h-full w-full object-cover" />}
