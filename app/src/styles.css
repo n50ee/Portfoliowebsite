@@ -652,3 +652,46 @@
     height: 26px;
   }
 }
+
+/* Fixed dock above the floating social menu, holding the accent picker
+ * rotated into a vertical stack instead of the horizontal row above. */
+.accent-picker-dock {
+  position: fixed;
+  right: 24px;
+  bottom: 240px;
+  z-index: 200;
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.accent-picker--vertical {
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.accent-picker--vertical .accent-picker-item {
+  width: 40px;
+  height: 32px;
+}
+
+.accent-picker--vertical .accent-picker-item::before {
+  left: auto;
+  bottom: auto;
+  right: 52px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.accent-picker--vertical .accent-picker-item:hover::before {
+  transform: translateY(-50%);
+}
+
+@media only screen and (max-width: 640px) {
+  .accent-picker--vertical .accent-picker-item {
+    width: 30px;
+    height: 20px;
+  }
+}

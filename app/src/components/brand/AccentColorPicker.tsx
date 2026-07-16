@@ -43,19 +43,21 @@ export function AccentColorPicker() {
   }
 
   return (
-    <div className="accent-picker" role="group" aria-label="Choose an accent color">
-      {COLORS.map((hex) => (
-        <button
-          key={hex}
-          type="button"
-          className="accent-picker-item"
-          style={itemStyle(hex)}
-          data-color={hex}
-          aria-label={`Set accent color to ${hex}`}
-          aria-pressed={active === hex}
-          onClick={() => pick(hex)}
-        />
-      ))}
+    <div className="accent-picker-dock">
+      <div className="accent-picker accent-picker--vertical" role="group" aria-label="Choose an accent color">
+        {COLORS.map((hex) => (
+          <button
+            key={hex}
+            type="button"
+            className="accent-picker-item"
+            style={itemStyle(hex)}
+            data-color={hex}
+            aria-label={`Set accent color to ${hex}`}
+            aria-pressed={active === hex}
+            onClick={() => pick(hex)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
