@@ -1,5 +1,6 @@
 import { Card } from "./Card";
 import { Badge } from "./Badge";
+import { GlowingEffect } from "../ui/glowing-effect";
 import type { ExperienceEntry } from "../../lib/types";
 
 function initials(place: string): string {
@@ -9,15 +10,16 @@ function initials(place: string): string {
 
 export function ExperienceCard({ entry }: { entry: ExperienceEntry }) {
   return (
-    <Card padding="md" className="flex gap-3">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-line-soft bg-paper-sunken">
+    <Card padding="md" className="relative flex gap-3">
+      <GlowingEffect proximity={64} spread={80} borderWidth={3} glow disabled={false} inactiveZone={0.01} />
+      <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-line-soft bg-paper-sunken">
         {entry.logoUrl ? (
           <img src={entry.logoUrl} alt="" className="h-full w-full object-cover" />
         ) : (
           <span className="font-display text-caption font-semibold text-ink-500">{initials(entry.place)}</span>
         )}
       </div>
-      <div className="min-w-0 flex-1">
+      <div className="relative min-w-0 flex-1">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <div className="truncate font-display text-body font-semibold text-ink-900">{entry.place}</div>
