@@ -6,6 +6,7 @@ import { ExperienceCard } from "../components/brand/ExperienceCard";
 import { Tag } from "../components/brand/Tag";
 import { buttonClasses } from "../components/brand/Button";
 import { Carousel, Card as CarouselCard } from "../components/ui/apple-cards-carousel";
+import { HireMeCard } from "../components/brand/HireMeCard";
 import { getHomeProjects, getAboutData } from "../lib/api/content.functions";
 import type { Project } from "../lib/types";
 
@@ -101,6 +102,10 @@ function Index() {
           </div>
         </section>
       )}
+
+      <section className="flex justify-center pb-24">
+        <HireMeCard />
+      </section>
 
       <Footer />
     </Container>
