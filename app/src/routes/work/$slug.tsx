@@ -5,6 +5,7 @@ import { Container } from "../../components/brand/Container";
 import { Card } from "../../components/brand/Card";
 import { Badge } from "../../components/brand/Badge";
 import { Tag } from "../../components/brand/Tag";
+import { CategoryGrid } from "../../components/brand/CategoryGrid";
 import { getProjectDetail } from "../../lib/api/content.functions";
 
 export const Route = createFileRoute("/work/$slug")({
@@ -97,6 +98,13 @@ function CaseStudy() {
           ))}
         </Card>
       </section>
+
+      {project.slug === "government-media-operations" && (
+        <section className="pb-24">
+          <h2 className="mb-6 font-display text-heading-md font-semibold text-ink-900">Focus areas</h2>
+          <CategoryGrid />
+        </section>
+      )}
 
       <Footer />
     </Container>
