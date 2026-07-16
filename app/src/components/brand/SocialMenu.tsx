@@ -4,8 +4,18 @@ const LINKEDIN_URL = "https://www.linkedin.com/in/n50e/";
 // TODO: replace with the real Instagram profile URL.
 const INSTAGRAM_URL = "#";
 
+const ICON_BASE = "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons";
+
 function itemStyle(i: number): CSSProperties {
   return { "--i": i } as CSSProperties;
+}
+
+function iconStyle(slug: string): CSSProperties {
+  const mask = `url(${ICON_BASE}/${slug}.svg)`;
+  return {
+    WebkitMaskImage: mask,
+    maskImage: mask,
+  } as CSSProperties;
 }
 
 /**
@@ -28,7 +38,7 @@ export function SocialMenu() {
           className="anchor anchor-linkedin"
           aria-label="LinkedIn"
         >
-          <img src="https://cdn.simpleicons.org/linkedin/ffffff" alt="" className="h-6 w-6" />
+          <span className="anchor-icon" style={iconStyle("linkedin")} aria-hidden="true" />
         </a>
       </div>
       <div style={itemStyle(1)} className="circle-box">
@@ -39,7 +49,7 @@ export function SocialMenu() {
           className="anchor anchor-instagram"
           aria-label="Instagram"
         >
-          <img src="https://cdn.simpleicons.org/instagram/ffffff" alt="" className="h-6 w-6" />
+          <span className="anchor-icon" style={iconStyle("instagram")} aria-hidden="true" />
         </a>
       </div>
     </aside>
