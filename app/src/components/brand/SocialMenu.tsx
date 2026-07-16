@@ -1,8 +1,7 @@
 import type { CSSProperties } from "react";
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/n50e/";
-// TODO: replace with the real Instagram profile URL.
-const INSTAGRAM_URL = "#";
+const INSTAGRAM_URL = "https://www.instagram.com/n50e/";
 
 const ICON_BASE = "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons";
 
