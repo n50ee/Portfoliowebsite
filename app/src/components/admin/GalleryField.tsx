@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { uploadImage } from "../../lib/upload-client";
-import { Input } from "../brand/Field";
+import { Textarea } from "../brand/Field";
 
 export function GalleryField({
   label,
@@ -34,9 +34,12 @@ export function GalleryField({
   }
 
   function addLink() {
-    const url = linkDraft.trim();
-    if (!url) return;
-    onChange([...value, url]);
+    const urls = linkDraft
+      .split(/[\n,]+/)
+      .map((u) => u.trim())
+      .filter(Boolean);
+    if (urls.length === 0) return;
+    onChange([...value, ...urls]);
     setLinkDraft("");
   }
 
@@ -75,18 +78,19 @@ export function GalleryField({
       />
       {uploading && <p className="mt-1 text-caption text-ink-500">Uploading…</p>}
       {error && <p className="mt-1 text-caption text-critical">{error}</p>}
-      <div className="mt-3 flex items-end gap-2">
-        <Input
-          label="Or paste a photo link"
+      <div className="mt-3 flex flex-col items-start gap-2">
+        <Textarea
+          label="Or paste photo links (one per line, for adding many at once)"
           value={linkDraft}
           onChange={(e) => setLinkDraft(e.target.value)}
           placeholder="https://…"
-          className="h-9"
+          rows={3}
+          className="w-full"
         />
         <button
           type="button"
           onClick={addLink}
-          className="h-9 shrink-0 rounded-md border border-line px-3 text-caption font-semibold text-ink-900"
+          className="shrink-0 rounded-md border border-line px-3 py-1.5 text-caption font-semibold text-ink-900"
         >
           Add
         </button>
