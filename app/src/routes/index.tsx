@@ -8,6 +8,7 @@ import { buttonClasses } from "../components/brand/Button";
 import { Carousel, Card as CarouselCard } from "../components/ui/apple-cards-carousel";
 import { HireMeCard } from "../components/brand/HireMeCard";
 import { CategoryGrid } from "../components/brand/CategoryGrid";
+import { PhotoSlider } from "../components/brand/PhotoSlider";
 import { getHomeProjects, getAboutData } from "../lib/api/content.functions";
 import type { Project } from "../lib/types";
 
@@ -41,6 +42,9 @@ function ProjectModalContent({ project }: { project: Project }) {
 
 function Index() {
   const { projects, experience } = Route.useLoaderData();
+  const photos = Array.from(
+    new Set(projects.flatMap((p) => [p.imageUrl, ...p.gallery]).filter((url): url is string => Boolean(url))),
+  );
 
   return (
     <Container>
@@ -92,6 +96,13 @@ function Index() {
           </p>
         )}
       </section>
+
+      {photos.length > 0 && (
+        <section className="pb-24">
+          <h2 className="mb-6 font-display text-heading-md font-semibold text-ink-900">Photos</h2>
+          <PhotoSlider images={photos} />
+        </section>
+      )}
 
       <section className="pb-24">
         <h2 className="mb-6 font-display text-heading-md font-semibold text-ink-900">Focus areas</h2>
