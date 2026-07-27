@@ -1,9 +1,15 @@
+import { useState } from "react";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { AdminShell } from "../../../components/admin/AdminShell";
 import { Card } from "../../../components/brand/Card";
 import { Badge } from "../../../components/brand/Badge";
 import { requireAdminBeforeLoad } from "../../../lib/admin-guard";
-import { adminDeleteProject, adminListProjects } from "../../../lib/api/admin.functions";
+import {
+  adminDeleteProject,
+  adminListProjects,
+  adminReorderProjects,
+} from "../../../lib/api/admin.functions";
+import type { Project } from "../../../lib/types";
 
 export const Route = createFileRoute("/admin/projects/")({
   beforeLoad: ({ location }) => requireAdminBeforeLoad(location.pathname),
@@ -12,12 +18,23 @@ export const Route = createFileRoute("/admin/projects/")({
 });
 
 function ProjectsList() {
-  const projects = Route.useLoaderData();
+  const loaderProjects = Route.useLoaderData();
   const router = useRouter();
+  const [projects, setProjects] = useState<Project[]>(loaderProjects);
 
   async function handleDelete(id: number, title: string) {
     if (!window.confirm(`Delete "${title}"? This can't be undone.`)) return;
     await adminDeleteProject({ data: { id } });
+    router.invalidate();
+  }
+
+  async function move(index: number, direction: -1 | 1) {
+    const target = index + direction;
+    if (target < 0 || target >= projects.length) return;
+    const next = [...projects];
+    [next[index], next[target]] = [next[target], next[index]];
+    setProjects(next);
+    await adminReorderProjects({ data: { orderedIds: next.map((p) => p.id) } });
     router.invalidate();
   }
 
@@ -37,9 +54,29 @@ function ProjectsList() {
         <p className="text-body-sm text-ink-500">No projects yet.</p>
       ) : (
         <div className="flex flex-col gap-3">
-          {projects.map((p) => (
+          {projects.map((p, i) => (
             <Card key={p.id} padding="md" className="flex items-center justify-between gap-4">
-              <div className="min-w-0">
+              <div className="flex shrink-0 flex-col gap-0.5">
+                <button
+                  type="button"
+                  onClick={() => move(i, -1)}
+                  disabled={i === 0}
+                  aria-label="Move up"
+                  className="flex h-6 w-6 items-center justify-center rounded border border-line text-ink-700 disabled:opacity-30"
+                >
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  onClick={() => move(i, 1)}
+                  disabled={i === projects.length - 1}
+                  aria-label="Move down"
+                  className="flex h-6 w-6 items-center justify-center rounded border border-line text-ink-700 disabled:opacity-30"
+                >
+                  ↓
+                </button>
+              </div>
+              <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <span className="truncate font-display text-heading-sm font-semibold text-ink-900">{p.title}</span>
                   <Badge tone={p.published ? "success" : "neutral"}>{p.published ? "Published" : "Draft"}</Badge>

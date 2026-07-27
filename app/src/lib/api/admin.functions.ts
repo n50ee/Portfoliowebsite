@@ -61,6 +61,14 @@ export const adminDeleteProject = createServerFn({ method: "POST" })
     return { ok: true as const };
   });
 
+export const adminReorderProjects = createServerFn({ method: "POST" })
+  .validator(z.object({ orderedIds: z.array(z.number()) }))
+  .handler(async ({ data }) => {
+    await assertAdmin();
+    await db.reorderProjects(data.orderedIds);
+    return { ok: true as const };
+  });
+
 // ---- Blog posts ----
 
 export const adminListBlogPosts = createServerFn({ method: "GET" }).handler(async () => {

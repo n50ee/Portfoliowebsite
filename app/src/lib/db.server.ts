@@ -165,6 +165,11 @@ export async function deleteProject(id: number): Promise<void> {
   await db().prepare("DELETE FROM projects WHERE id = ?1").bind(id).run();
 }
 
+export async function reorderProjects(orderedIds: number[]): Promise<void> {
+  const stmt = db().prepare("UPDATE projects SET sort_order = ?1 WHERE id = ?2");
+  await db().batch(orderedIds.map((id, index) => stmt.bind(index, id)));
+}
+
 // ---- Blog posts ----
 
 type BlogPostRow = {
