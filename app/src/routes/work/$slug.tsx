@@ -5,6 +5,7 @@ import { Container } from "../../components/brand/Container";
 import { Card } from "../../components/brand/Card";
 import { Badge } from "../../components/brand/Badge";
 import { Tag } from "../../components/brand/Tag";
+import { MovingGallery } from "../../components/brand/MovingGallery";
 import { getProjectDetail } from "../../lib/api/content.functions";
 
 export const Route = createFileRoute("/work/$slug")({
@@ -68,12 +69,8 @@ function CaseStudy() {
         </div>
 
         {project.gallery.length > 0 && (
-          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
-            {project.gallery.map((url) => (
-              <div key={url} className="aspect-square overflow-hidden rounded-lg border border-line-soft">
-                <img src={url} alt="" className="h-full w-full object-cover" />
-              </div>
-            ))}
+          <div className="mt-6">
+            <MovingGallery images={project.gallery} />
           </div>
         )}
       </section>

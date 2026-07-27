@@ -695,3 +695,48 @@
     height: 20px;
   }
 }
+
+/* Moving gallery: an auto-scrolling strip of case-study photos. The image
+ * list is rendered twice back to back and slid by exactly one set-width so
+ * the loop reads as continuous; hover pauses it for a closer look. */
+.moving-gallery {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+
+.moving-gallery-track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  animation: moving-gallery-scroll 32s linear infinite;
+}
+
+.moving-gallery:hover .moving-gallery-track {
+  animation-play-state: paused;
+}
+
+.moving-gallery-item {
+  flex-shrink: 0;
+  width: 280px;
+  height: 200px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--color-line-soft);
+}
+
+@keyframes moving-gallery-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .moving-gallery-item {
+    width: 200px;
+    height: 150px;
+  }
+}
