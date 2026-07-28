@@ -52,9 +52,15 @@ export interface ExperienceEntry {
   logoUrl: string;
 }
 
+export interface PersonEntry {
+  name: string;
+  photoUrl: string;
+}
+
 export interface Profile {
   bio: string;
   skills: string[];
   experience: ExperienceEntry[];
+  people: PersonEntry[];
   resumeUrl: string | null;
 }

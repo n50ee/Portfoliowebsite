@@ -10,13 +10,14 @@ import { Carousel, Card as CarouselCard } from "../components/ui/apple-cards-car
 import { HireMeCard } from "../components/brand/HireMeCard";
 import { CategoryGrid } from "../components/brand/CategoryGrid";
 import { PhotoSlider } from "../components/brand/PhotoSlider";
+import { PeopleGrid } from "../components/brand/PeopleGrid";
 import { getHomeProjects, getAboutData } from "../lib/api/content.functions";
 import type { Project } from "../lib/types";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
     const [projects, profile] = await Promise.all([getHomeProjects(), getAboutData()]);
-    return { projects, experience: profile.experience };
+    return { projects, experience: profile.experience, people: profile.people };
   },
   component: Index,
 });
@@ -42,7 +43,7 @@ function ProjectModalContent({ project }: { project: Project }) {
 }
 
 function Index() {
-  const { projects, experience } = Route.useLoaderData();
+  const { projects, experience, people } = Route.useLoaderData();
   const photos = Array.from(
     new Set(projects.flatMap((p) => [p.imageUrl, ...p.gallery]).filter((url): url is string => Boolean(url))),
   );
@@ -112,6 +113,13 @@ function Index() {
         <h2 className="mb-6 font-display text-heading-md font-semibold text-ink-900">Focus areas</h2>
         <CategoryGrid />
       </section>
+
+      {people.length > 0 && (
+        <section className="pb-24">
+          <h2 className="mb-6 font-display text-heading-md font-semibold text-ink-900">People we've worked with</h2>
+          <PeopleGrid people={people} />
+        </section>
+      )}
 
       {experience.length > 0 && (
         <section className="pb-24">

@@ -326,25 +326,30 @@ type ProfileRow = {
   bio: string;
   skills: string;
   experience: string;
+  people: string;
   resume_url: string | null;
 };
 
+function parseJsonObjectArray<T>(value: string | null | undefined): T[] {
+  if (!value) return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function getProfile(): Promise<Profile> {
   const row = await db()
-    .prepare("SELECT bio, skills, experience, resume_url FROM profile WHERE id = 1")
+    .prepare("SELECT bio, skills, experience, people, resume_url FROM profile WHERE id = 1")
     .first<ProfileRow>();
-  if (!row) return { bio: "", skills: [], experience: [], resumeUrl: null };
-  let experience: Profile["experience"] = [];
-  try {
-    const parsed = JSON.parse(row.experience);
-    if (Array.isArray(parsed)) experience = parsed;
-  } catch {
-    experience = [];
-  }
+  if (!row) return { bio: "", skills: [], experience: [], people: [], resumeUrl: null };
   return {
     bio: row.bio,
     skills: parseJsonArray(row.skills),
-    experience,
+    experience: parseJsonObjectArray<Profile["experience"][number]>(row.experience),
+    people: parseJsonObjectArray<Profile["people"][number]>(row.people),
     resumeUrl: row.resume_url,
   };
 }
@@ -352,9 +357,15 @@ export async function getProfile(): Promise<Profile> {
 export async function updateProfile(input: Profile): Promise<void> {
   await db()
     .prepare(
-      `UPDATE profile SET bio=?1, skills=?2, experience=?3, resume_url=?4, updated_at=datetime('now') WHERE id=1`,
+      `UPDATE profile SET bio=?1, skills=?2, experience=?3, people=?4, resume_url=?5, updated_at=datetime('now') WHERE id=1`,
     )
-    .bind(input.bio, JSON.stringify(input.skills), JSON.stringify(input.experience), input.resumeUrl)
+    .bind(
+      input.bio,
+      JSON.stringify(input.skills),
+      JSON.stringify(input.experience),
+      JSON.stringify(input.people),
+      input.resumeUrl,
+    )
     .run();
 }
 

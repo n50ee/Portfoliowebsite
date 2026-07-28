@@ -9,6 +9,7 @@ import { adminGetProfile, adminUpdateProfile } from "../../lib/api/admin.functio
 import type { Profile } from "../../lib/types";
 
 const emptyExperienceRow = { role: "", place: "", years: "", description: "", workType: "", duration: "", logoUrl: "" };
+const emptyPersonRow = { name: "", photoUrl: "" };
 
 export const Route = createFileRoute("/admin/profile")({
   beforeLoad: ({ location }) => requireAdminBeforeLoad(location.pathname),
@@ -21,6 +22,7 @@ function ProfileEditor() {
   const [bio, setBio] = useState(profile.bio);
   const [skillsText, setSkillsText] = useState(profile.skills.join(", "));
   const [experience, setExperience] = useState<Profile["experience"]>(profile.experience);
+  const [people, setPeople] = useState<Profile["people"]>(profile.people);
   const [resumeUrl, setResumeUrl] = useState(profile.resumeUrl ?? "");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -37,6 +39,18 @@ function ProfileEditor() {
     setExperience((rows) => rows.filter((_, idx) => idx !== i));
   }
 
+  function updatePerson(i: number, field: keyof Profile["people"][number], value: string) {
+    setPeople((rows) => rows.map((row, idx) => (idx === i ? { ...row, [field]: value } : row)));
+  }
+
+  function addPersonRow() {
+    setPeople((rows) => [...rows, { ...emptyPersonRow }]);
+  }
+
+  function removePersonRow(i: number) {
+    setPeople((rows) => rows.filter((_, idx) => idx !== i));
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
@@ -49,6 +63,7 @@ function ProfileEditor() {
           .map((s) => s.trim())
           .filter(Boolean),
         experience: experience.filter((row) => row.role || row.place || row.years),
+        people: people.filter((row) => row.name),
         resumeUrl: resumeUrl || null,
       },
     });
@@ -129,6 +144,42 @@ function ProfileEditor() {
             className="mt-2 rounded-md border border-line px-3 py-1.5 text-caption font-semibold text-ink-900"
           >
             + Add role
+          </button>
+        </div>
+
+        <div>
+          <div className="mb-2 text-body-sm font-semibold text-ink-900">
+            People we've worked with (shown on the homepage)
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {people.map((row, i) => (
+              <div key={i} className="flex flex-col gap-2 rounded-md border border-line p-3">
+                <Input
+                  placeholder="Name"
+                  value={row.name}
+                  onChange={(e) => updatePerson(i, "name", e.target.value)}
+                />
+                <ImageField
+                  label="Photo (optional, falls back to initials)"
+                  value={row.photoUrl}
+                  onChange={(url) => updatePerson(i, "photoUrl", url)}
+                />
+                <button
+                  type="button"
+                  onClick={() => removePersonRow(i)}
+                  className="self-start text-caption font-semibold text-critical"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={addPersonRow}
+            className="mt-2 rounded-md border border-line px-3 py-1.5 text-caption font-semibold text-ink-900"
+          >
+            + Add person
           </button>
         </div>
 

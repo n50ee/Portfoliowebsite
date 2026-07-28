@@ -164,6 +164,14 @@ const profileInputSchema = z.object({
       }),
     )
     .max(50),
+  people: z
+    .array(
+      z.object({
+        name: z.string().trim().max(200),
+        photoUrl: z.string().trim().max(2000),
+      }),
+    )
+    .max(200),
   resumeUrl: z.string().trim().max(2000).nullable(),
 });
 
