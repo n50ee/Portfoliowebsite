@@ -102,13 +102,13 @@ function Index() {
         )}
       </section>
 
-      {photos.length > 0 && (
+      {photoGroups.length > 0 && (
         <section className="pb-24">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
             <h2 className="font-display text-heading-md font-semibold text-ink-900">Photos</h2>
             <AnimatedFrameBadge>5 years of Community Service</AnimatedFrameBadge>
           </div>
-          <PhotoSlider images={photos} />
+          <PhotoGallery groups={photoGroups} />
         </section>
       )}
 
