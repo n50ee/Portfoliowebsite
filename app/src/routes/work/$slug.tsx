@@ -34,8 +34,8 @@ function CaseStudy() {
         ← Back to work
       </Link>
 
-      <section className="py-8 pb-16">
-        <div className="mb-4 flex items-center gap-2.5">
+      <section className="pb-20 pt-10 sm:pt-16">
+        <div className="mb-5 flex items-center gap-2.5">
           <span
             className="font-body text-caption font-semibold uppercase tracking-eyebrow"
             style={{ color: accent }}
@@ -44,14 +44,18 @@ function CaseStudy() {
           </span>
           <Badge tone="success">{project.status}</Badge>
         </div>
-        <h1 className="mb-5 max-w-[760px] font-display text-display-lg font-medium tracking-display text-ink-900">
+        <h1 className="mb-6 max-w-[820px] font-display text-display-lg font-semibold tracking-display text-ink-900">
           {project.title}
         </h1>
-        <div className="mb-8 flex flex-wrap gap-2">
+        {project.description && (
+          <p className="mb-8 max-w-[560px] font-body text-subtitle text-ink-500">{project.description}</p>
+        )}
+        <div className="mb-14 flex flex-wrap gap-2">
           {project.tags.map((t) => (
             <Tag key={t}>{t}</Tag>
           ))}
         </div>
+
         <div
           className="relative aspect-hero overflow-hidden rounded-xl border border-line-soft"
           style={{ background: project.imageUrl ? undefined : tint }}
@@ -75,24 +79,27 @@ function CaseStudy() {
         )}
       </section>
 
-      <section className="grid grid-cols-1 gap-12 pb-24 md:grid-cols-[2fr_1fr]">
-        <div className="whitespace-pre-line font-body text-body leading-body text-ink-700">{project.body}</div>
-        <Card raised>
-          <h3 className="mb-3 font-display text-heading-sm text-ink-900">At a glance</h3>
+      <section className="pb-16">
+        <div className="mx-auto max-w-[640px] whitespace-pre-line font-body text-subtitle leading-body text-ink-700">
+          {project.body}
+        </div>
+      </section>
+
+      <section className="pb-24">
+        <div className="grid grid-cols-1 gap-8 border-y border-line-soft py-8 sm:grid-cols-3">
           {[
             { label: "Role", value: project.role },
             { label: "Timeline", value: project.timeline },
             { label: "Team", value: project.team },
           ].map((row) => (
-            <div
-              key={row.label}
-              className="flex justify-between border-b border-line-soft py-2.5 font-body text-body-sm last:border-b-0"
-            >
-              <span className="text-ink-500">{row.label}</span>
-              <span className="font-semibold text-ink-900">{row.value || "-"}</span>
+            <div key={row.label} className="font-body">
+              <div className="mb-1.5 text-caption font-semibold uppercase tracking-eyebrow text-ink-500">
+                {row.label}
+              </div>
+              <div className="text-heading-sm font-semibold text-ink-900">{row.value || "-"}</div>
             </div>
           ))}
-        </Card>
+        </div>
       </section>
 
       <Footer />
