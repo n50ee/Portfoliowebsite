@@ -21,7 +21,14 @@ function shuffled(input: string[]): string[] {
  */
 export function PhotoSlider({ images: sourceImages }: { images: string[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [images] = useState(() => shuffled(sourceImages));
+  // Render server/client in the same deterministic order first (avoids a
+  // hydration mismatch, which was desyncing click handlers from the photos
+  // actually shown), then shuffle client-side only, once mounted.
+  const [images, setImages] = useState(sourceImages);
+  useEffect(() => {
+    setImages(shuffled(sourceImages));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
