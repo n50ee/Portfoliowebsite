@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 function shuffled(input: string[]): string[] {
@@ -19,7 +19,7 @@ function shuffled(input: string[]): string[] {
  * hover, and stops entirely if the browser prefers-reduced-motion. Clicking
  * a photo opens it full-size in a lightbox.
  */
-export function PhotoSlider({ images: sourceImages }: { images: string[] }) {
+export function PhotoSlider({ images: sourceImages, footerLeft }: { images: string[]; footerLeft?: ReactNode }) {
   const containerRef = useRef<HTMLDivElement>(null);
   // Render server/client in the same deterministic order first (avoids a
   // hydration mismatch, which was desyncing click handlers from the photos
@@ -102,23 +102,26 @@ export function PhotoSlider({ images: sourceImages }: { images: string[] }) {
           </motion.button>
         ))}
       </div>
-      <div className="mt-4 flex items-center justify-end gap-2">
-        <button
-          type="button"
-          onClick={() => scrollToIndex(index - 1)}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-paper text-ink-700 transition-colors duration-150 ease-out"
-          aria-label="Previous photo"
-        >
-          ←
-        </button>
-        <button
-          type="button"
-          onClick={() => scrollToIndex(index + 1)}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-paper text-ink-700 transition-colors duration-150 ease-out"
-          aria-label="Next photo"
-        >
-          →
-        </button>
+      <div className="mt-4 flex items-center justify-between gap-2">
+        <div>{footerLeft}</div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => scrollToIndex(index - 1)}
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-paper text-ink-700 transition-colors duration-150 ease-out"
+            aria-label="Previous photo"
+          >
+            ←
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollToIndex(index + 1)}
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-paper text-ink-700 transition-colors duration-150 ease-out"
+            aria-label="Next photo"
+          >
+            →
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>

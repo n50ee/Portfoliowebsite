@@ -9,7 +9,7 @@ import { buttonClasses } from "../components/brand/Button";
 import { Carousel, Card as CarouselCard } from "../components/ui/apple-cards-carousel";
 import { HireMeCard } from "../components/brand/HireMeCard";
 import { CategoryGrid } from "../components/brand/CategoryGrid";
-import { PhotoSlider } from "../components/brand/PhotoSlider";
+import { PhotoGallery } from "../components/brand/PhotoGallery";
 import { PeopleGrid } from "../components/brand/PeopleGrid";
 import { getHomeProjects, getAboutData } from "../lib/api/content.functions";
 import type { Project } from "../lib/types";
@@ -44,9 +44,12 @@ function ProjectModalContent({ project }: { project: Project }) {
 
 function Index() {
   const { projects, experience, people } = Route.useLoaderData();
-  const photos = Array.from(
-    new Set(projects.flatMap((p) => [p.imageUrl, ...p.gallery]).filter((url): url is string => Boolean(url))),
-  );
+  const photoGroups = projects
+    .map((p) => ({
+      title: p.title,
+      images: Array.from(new Set([p.imageUrl, ...p.gallery].filter((url): url is string => Boolean(url)))),
+    }))
+    .filter((g) => g.images.length > 0);
 
   return (
     <Container>
