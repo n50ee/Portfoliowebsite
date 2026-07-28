@@ -17,13 +17,13 @@ export function WorkRevealColumns({ items }: { items: RevealItem[] }) {
   if (items.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-1 divide-y divide-line-soft border border-line-soft sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-px border border-line-soft bg-line-soft sm:grid-cols-2">
       {items.map((item) => (
         <Link
           key={item.slug}
           to="/work/$slug"
           params={{ slug: item.slug }}
-          className="group relative flex h-80 items-center justify-center overflow-hidden p-6 text-center no-underline sm:h-[560px]"
+          className="group relative flex h-80 items-center justify-center overflow-hidden bg-paper p-6 text-center no-underline sm:h-[560px]"
         >
           {item.imageUrl && (
             <img
