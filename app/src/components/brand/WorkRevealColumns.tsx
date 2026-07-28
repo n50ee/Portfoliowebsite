@@ -23,7 +23,7 @@ export function WorkRevealColumns({ items }: { items: RevealItem[] }) {
           key={item.slug}
           to="/work/$slug"
           params={{ slug: item.slug }}
-          className="group relative flex h-64 items-center justify-center overflow-hidden p-4 text-center no-underline sm:h-[420px]"
+          className="group relative flex h-80 items-center justify-center overflow-hidden p-6 text-center no-underline sm:h-[560px]"
         >
           {item.imageUrl && (
             <img
@@ -33,10 +33,10 @@ export function WorkRevealColumns({ items }: { items: RevealItem[] }) {
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-ink-900/85 via-ink-900/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-          <span className="relative font-display text-heading-sm font-bold leading-tight text-ink-300 transition-colors duration-500 ease-out group-hover:text-paper sm:text-heading-md">
+          <span className="relative font-display text-heading-md font-bold leading-tight text-ink-300 transition-colors duration-500 ease-out group-hover:text-paper sm:text-heading-lg">
             {item.client}
           </span>
-          <span className="absolute bottom-5 left-5 font-body text-body-sm font-semibold text-paper opacity-0 transition-opacity delay-100 duration-300 group-hover:opacity-100">
+          <span className="absolute bottom-6 left-6 font-body text-body-sm font-semibold text-paper opacity-0 transition-opacity delay-100 duration-300 group-hover:opacity-100">
             View case study →
           </span>
         </Link>
