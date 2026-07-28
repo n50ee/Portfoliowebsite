@@ -4,6 +4,7 @@ import { Footer } from "../components/brand/Footer";
 import { Container } from "../components/brand/Container";
 import { ExperienceCard } from "../components/brand/ExperienceCard";
 import { Tag } from "../components/brand/Tag";
+import { Badge } from "../components/brand/Badge";
 import { buttonClasses } from "../components/brand/Button";
 import { Carousel, Card as CarouselCard } from "../components/ui/apple-cards-carousel";
 import { HireMeCard } from "../components/brand/HireMeCard";
@@ -99,7 +100,10 @@ function Index() {
 
       {photos.length > 0 && (
         <section className="pb-24">
-          <h2 className="mb-6 font-display text-heading-md font-semibold text-ink-900">Photos</h2>
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+            <h2 className="font-display text-heading-md font-semibold text-ink-900">Photos</h2>
+            <Badge tone="accent">5 years of Community Service</Badge>
+          </div>
           <PhotoSlider images={photos} />
         </section>
       )}
