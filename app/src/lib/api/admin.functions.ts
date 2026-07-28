@@ -27,7 +27,7 @@ const projectInputSchema = z.object({
   themeAccent: z.string().trim().max(20).nullable(),
   themeTint: z.string().trim().max(20).nullable(),
   imageUrl: z.string().trim().max(2000).nullable(),
-  gallery: z.array(z.string().trim().min(1)).max(60),
+  gallery: z.array(z.string().trim().min(1)).max(300),
   role: z.string().trim().max(200).nullable(),
   timeline: z.string().trim().max(200).nullable(),
   team: z.string().trim().max(200).nullable(),
