@@ -1,16 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { cn } from "../../lib/utils";
+
+function shuffled(input: string[]): string[] {
+  const arr = [...input];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
 /**
- * Homepage photo slider aggregating every project's hero + gallery images.
- * Native scroll-snap track (same pattern as the Selected work carousel) so
- * it stays a plain scroll container under the hood; auto-advances every
- * 4s, pausing on hover, and stops entirely if the browser prefers-reduced-motion.
- * Clicking a photo opens it full-size in a lightbox.
+ * Homepage photo slider aggregating every project's hero + gallery images,
+ * shuffled once on mount so the mix isn't grouped by project (shows the
+ * range of work rather than one project's photos in a row). Native
+ * scroll-snap track (same pattern as the Selected work carousel) so it
+ * stays a plain scroll container under the hood; auto-advances, pausing on
+ * hover, and stops entirely if the browser prefers-reduced-motion. Clicking
+ * a photo opens it full-size in a lightbox.
  */
-export function PhotoSlider({ images }: { images: string[] }) {
+export function PhotoSlider({ images: sourceImages }: { images: string[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [images] = useState(() => shuffled(sourceImages));
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -27,7 +38,7 @@ export function PhotoSlider({ images }: { images: string[] }) {
 
   useEffect(() => {
     if (paused || openIndex !== null || reducedMotion || images.length <= 1) return;
-    const id = setInterval(() => scrollToIndex(index + 1), 4000);
+    const id = setInterval(() => scrollToIndex(index + 1), 2200);
     return () => clearInterval(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, paused, openIndex, reducedMotion, images.length]);
@@ -62,7 +73,7 @@ export function PhotoSlider({ images }: { images: string[] }) {
             onClick={() => setOpenIndex(i)}
             animate={{ scale: i === index ? 1 : 0.93, opacity: i === index ? 1 : 0.65 }}
             whileHover={{ scale: 1.02 }}
-            transition={{ duration: reducedMotion ? 0 : 0.35, ease: "easeOut" }}
+            transition={{ duration: reducedMotion ? 0 : 0.22, ease: "easeOut" }}
             className="aspect-[4/3] w-[78%] shrink-0 snap-center overflow-hidden rounded-xl border border-line-soft sm:w-[46%] lg:w-[31%]"
             aria-label={`Open photo ${i + 1} full size`}
           >
@@ -70,39 +81,23 @@ export function PhotoSlider({ images }: { images: string[] }) {
           </motion.button>
         ))}
       </div>
-      <div className="mt-4 flex items-center justify-between">
-        <div className="flex gap-1.5">
-          {images.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => scrollToIndex(i)}
-              aria-label={`Go to photo ${i + 1}`}
-              className={cn(
-                "h-1.5 rounded-pill transition-all duration-150 ease-out",
-                i === index ? "w-5 bg-signature-500" : "w-1.5 bg-line",
-              )}
-            />
-          ))}
-        </div>
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={() => scrollToIndex(index - 1)}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-paper text-ink-700 transition-colors duration-150 ease-out"
-            aria-label="Previous photo"
-          >
-            ←
-          </button>
-          <button
-            type="button"
-            onClick={() => scrollToIndex(index + 1)}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-paper text-ink-700 transition-colors duration-150 ease-out"
-            aria-label="Next photo"
-          >
-            →
-          </button>
-        </div>
+      <div className="mt-4 flex items-center justify-end gap-2">
+        <button
+          type="button"
+          onClick={() => scrollToIndex(index - 1)}
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-paper text-ink-700 transition-colors duration-150 ease-out"
+          aria-label="Previous photo"
+        >
+          ←
+        </button>
+        <button
+          type="button"
+          onClick={() => scrollToIndex(index + 1)}
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-paper text-ink-700 transition-colors duration-150 ease-out"
+          aria-label="Next photo"
+        >
+          →
+        </button>
       </div>
 
       <AnimatePresence>
