@@ -11,6 +11,7 @@ import { HireMeCard } from "../components/brand/HireMeCard";
 import { CategoryGrid } from "../components/brand/CategoryGrid";
 import { PhotoGallery } from "../components/brand/PhotoGallery";
 import { PeopleGrid } from "../components/brand/PeopleGrid";
+import { WorkRevealColumns } from "../components/brand/WorkRevealColumns";
 import { getHomeProjects, getAboutData } from "../lib/api/content.functions";
 import type { Project } from "../lib/types";
 
@@ -101,6 +102,15 @@ function Index() {
           </p>
         )}
       </section>
+
+      {projects.length > 0 && (
+        <section className="pb-24">
+          <h2 className="mb-6 font-display text-heading-md font-semibold text-ink-900">Clients</h2>
+          <WorkRevealColumns
+            items={projects.map((p) => ({ slug: p.slug, client: p.client, imageUrl: p.imageUrl }))}
+          />
+        </section>
+      )}
 
       {photoGroups.length > 0 && (
         <section className="pb-24">
