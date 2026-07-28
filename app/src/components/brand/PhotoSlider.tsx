@@ -32,7 +32,13 @@ export function PhotoSlider({ images: sourceImages }: { images: string[] }) {
     if (!el) return;
     const clamped = (next + images.length) % images.length;
     const child = el.children[clamped] as HTMLElement | undefined;
-    child?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    if (child) {
+      // Scroll only this container's own scrollLeft, centering the child.
+      // scrollIntoView() would also nudge the page's vertical scroll to
+      // keep the element in view, fighting the user's own scrolling.
+      const target = child.offsetLeft - (el.clientWidth - child.clientWidth) / 2;
+      el.scrollTo({ left: target, behavior: "smooth" });
+    }
     setIndex(clamped);
   }
 
