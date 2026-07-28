@@ -49,6 +49,14 @@ export function PhotoSlider({ images: sourceImages }: { images: string[] }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, paused, openIndex, reducedMotion, images.length]);
 
+  function handleMouseEnter() {
+    setPaused(true);
+    // Freeze the track immediately: a smooth scroll already in flight from
+    // the last autoplay tick would otherwise keep sliding for a moment,
+    // so a click can land on a photo mid-transition.
+    containerRef.current?.scrollTo({ left: containerRef.current.scrollLeft, behavior: "auto" });
+  }
+
   useEffect(() => {
     if (openIndex === null) return;
     function handleKey(e: KeyboardEvent) {
@@ -67,7 +75,7 @@ export function PhotoSlider({ images: sourceImages }: { images: string[] }) {
   if (images.length === 0) return null;
 
   return (
-    <div onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+    <div onMouseEnter={handleMouseEnter} onMouseLeave={() => setPaused(false)}>
       <div
         ref={containerRef}
         className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
