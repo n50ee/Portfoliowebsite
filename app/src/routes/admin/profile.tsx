@@ -9,7 +9,7 @@ import { adminGetProfile, adminUpdateProfile } from "../../lib/api/admin.functio
 import type { Profile } from "../../lib/types";
 
 const emptyExperienceRow = { role: "", place: "", years: "", description: "", workType: "", duration: "", logoUrl: "" };
-const emptyPersonRow = { name: "", photoUrl: "" };
+const emptyPersonRow = { name: "", role: "", photoUrl: "" };
 
 export const Route = createFileRoute("/admin/profile")({
   beforeLoad: ({ location }) => requireAdminBeforeLoad(location.pathname),
@@ -158,6 +158,11 @@ function ProfileEditor() {
                   placeholder="Name"
                   value={row.name}
                   onChange={(e) => updatePerson(i, "name", e.target.value)}
+                />
+                <Input
+                  placeholder="Role, e.g. Actor, Businessman"
+                  value={row.role}
+                  onChange={(e) => updatePerson(i, "role", e.target.value)}
                 />
                 <ImageField
                   label="Photo (optional, falls back to initials)"

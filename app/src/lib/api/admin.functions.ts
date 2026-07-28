@@ -168,6 +168,7 @@ const profileInputSchema = z.object({
     .array(
       z.object({
         name: z.string().trim().max(200),
+        role: z.string().trim().max(200),
         photoUrl: z.string().trim().max(2000),
       }),
     )

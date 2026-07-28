@@ -54,6 +54,7 @@ export interface ExperienceEntry {
 
 export interface PersonEntry {
   name: string;
+  role: string;
   photoUrl: string;
 }
 

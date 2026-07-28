@@ -32,7 +32,10 @@ export function PeopleGrid({ people }: { people: PersonEntry[] }) {
               </div>
             )}
           </div>
-          <span className="font-body text-body-sm font-semibold text-ink-900">{person.name}</span>
+          <div>
+            <span className="block font-body text-body-sm font-semibold text-signature-500">{person.name}</span>
+            {person.role && <span className="block font-body text-caption text-ink-500">{person.role}</span>}
+          </div>
         </div>
       ))}
     </div>
