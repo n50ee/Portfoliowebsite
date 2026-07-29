@@ -181,6 +181,10 @@ const profileInputSchema = z.object({
         name: z.string().trim().max(200),
         role: z.string().trim().max(200),
         photoUrl: z.string().trim().max(2000),
+        photoX: z.number().min(0).max(100).optional(),
+        photoY: z.number().min(0).max(100).optional(),
+        photoZoom: z.number().min(100).max(300).optional(),
+        photoFit: z.enum(["cover", "contain"]).optional(),
       }),
     )
     .max(200),

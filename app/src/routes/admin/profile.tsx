@@ -4,6 +4,7 @@ import { AdminShell } from "../../components/admin/AdminShell";
 import { Input, Textarea } from "../../components/brand/Field";
 import { Button } from "../../components/brand/Button";
 import { ImageField } from "../../components/admin/ImageField";
+import { PhotoAdjustField } from "../../components/admin/PhotoAdjustField";
 import { requireAdminBeforeLoad } from "../../lib/admin-guard";
 import { adminGetProfile, adminUpdateProfile } from "../../lib/api/admin.functions";
 import type { Profile } from "../../lib/types";
@@ -39,8 +40,8 @@ function ProfileEditor() {
     setExperience((rows) => rows.filter((_, idx) => idx !== i));
   }
 
-  function updatePerson(i: number, field: keyof Profile["people"][number], value: string) {
-    setPeople((rows) => rows.map((row, idx) => (idx === i ? { ...row, [field]: value } : row)));
+  function patchPerson(i: number, patch: Partial<Profile["people"][number]>) {
+    setPeople((rows) => rows.map((row, idx) => (idx === i ? { ...row, ...patch } : row)));
   }
 
   function addPersonRow() {
@@ -157,18 +158,19 @@ function ProfileEditor() {
                 <Input
                   placeholder="Name"
                   value={row.name}
-                  onChange={(e) => updatePerson(i, "name", e.target.value)}
+                  onChange={(e) => patchPerson(i, { name: e.target.value })}
                 />
                 <Input
                   placeholder="Role, e.g. Actor, Businessman"
                   value={row.role}
-                  onChange={(e) => updatePerson(i, "role", e.target.value)}
+                  onChange={(e) => patchPerson(i, { role: e.target.value })}
                 />
                 <ImageField
                   label="Photo (optional, falls back to initials)"
                   value={row.photoUrl}
-                  onChange={(url) => updatePerson(i, "photoUrl", url)}
+                  onChange={(url) => patchPerson(i, { photoUrl: url })}
                 />
+                <PhotoAdjustField value={row} onChange={(patch) => patchPerson(i, patch)} />
                 <button
                   type="button"
                   onClick={() => removePersonRow(i)}

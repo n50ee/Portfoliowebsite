@@ -1,4 +1,5 @@
 import { cn } from "../../lib/utils";
+import { personPhotoStyle } from "../../lib/person-photo";
 import type { PersonEntry } from "../../lib/types";
 
 function initials(name: string): string {
@@ -23,7 +24,7 @@ export function PeopleGrid({ people }: { people: PersonEntry[] }) {
           <div key={person.name + i} className="w-[190px] shrink-0 sm:w-[220px]">
             <div className="mb-3 aspect-[4/5] overflow-hidden rounded-xl border border-line-soft">
               {person.photoUrl ? (
-                <img src={person.photoUrl} alt="" className="h-full w-full object-cover" />
+                <img src={person.photoUrl} alt="" className="h-full w-full" style={personPhotoStyle(person)} />
               ) : (
                 <div
                   className={cn(

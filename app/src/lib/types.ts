@@ -65,6 +65,12 @@ export interface PersonEntry {
   name: string;
   role: string;
   photoUrl: string;
+  /** Focal point within the card, 0-100. Defaults to centered (50/50). */
+  photoX?: number;
+  photoY?: number;
+  /** Zoom percentage, 100 = no zoom. */
+  photoZoom?: number;
+  photoFit?: "cover" | "contain";
 }
 
 export interface Profile {
