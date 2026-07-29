@@ -10,21 +10,21 @@ function initials(name: string): string {
 
 const PLACEHOLDER_TINTS = ["bg-signature-100 text-signature-600", "bg-paper-sunken text-ink-700"];
 
-/** Grid of circular avatars + names. Falls back to an initials tile when a person has no photo yet. */
+/** Horizontal scrollable row of photo cards, one per person. Falls back to an initials tile when a person has no photo yet. */
 export function PeopleGrid({ people }: { people: PersonEntry[] }) {
   if (people.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-3 gap-x-6 gap-y-8 sm:grid-cols-4 lg:grid-cols-6">
+    <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {people.map((person, i) => (
-        <div key={person.name + i} className="flex flex-col items-center gap-2 text-center">
-          <div className="h-20 w-20 overflow-hidden rounded-full border border-line-soft">
+        <div key={person.name + i} className="w-[190px] shrink-0 snap-start sm:w-[220px]">
+          <div className="mb-3 aspect-[4/5] overflow-hidden rounded-xl border border-line-soft">
             {person.photoUrl ? (
               <img src={person.photoUrl} alt="" className="h-full w-full object-cover" />
             ) : (
               <div
                 className={cn(
-                  "flex h-full w-full items-center justify-center font-display text-heading-sm font-semibold",
+                  "flex h-full w-full items-center justify-center font-display text-heading-md font-semibold",
                   PLACEHOLDER_TINTS[i % PLACEHOLDER_TINTS.length],
                 )}
               >
@@ -32,10 +32,8 @@ export function PeopleGrid({ people }: { people: PersonEntry[] }) {
               </div>
             )}
           </div>
-          <div>
-            <span className="block font-body text-body-sm font-semibold text-signature-500">{person.name}</span>
-            {person.role && <span className="block font-body text-caption text-ink-500">{person.role}</span>}
-          </div>
+          <span className="block font-body text-body-sm font-semibold text-ink-900">{person.name}</span>
+          {person.role && <span className="block font-body text-caption text-signature-500">{person.role}</span>}
         </div>
       ))}
     </div>
