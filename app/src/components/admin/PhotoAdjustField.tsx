@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { personPhotoStyle } from "../../lib/person-photo";
 import type { PersonEntry } from "../../lib/types";
 
@@ -18,6 +19,19 @@ function Slider({
   suffix: string;
   onChange: (value: number) => void;
 }) {
+  const ref = useRef<HTMLInputElement>(null);
+
+  // Range inputs change value on hover-scroll, so simply scrolling the admin
+  // page past a slider would silently re-crop a photo. Swallow wheel events
+  // over the control (needs a non-passive listener to be cancellable).
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const stop = (e: WheelEvent) => e.preventDefault();
+    el.addEventListener("wheel", stop, { passive: false });
+    return () => el.removeEventListener("wheel", stop);
+  }, []);
+
   return (
     <label className="flex flex-col gap-1">
       <span className="flex items-center justify-between text-caption text-ink-500">
@@ -28,6 +42,7 @@ function Slider({
         </span>
       </span>
       <input
+        ref={ref}
         type="range"
         min={min}
         max={max}
