@@ -751,6 +751,28 @@
   }
 }
 
+/* People row: same auto-scroll technique as the moving gallery, reusing its
+ * keyframe, but sized for photo-card content (image + name/role text)
+ * instead of bare images. */
+.people-scroll {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+
+.people-track {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  width: max-content;
+  padding: 4px 0 14px;
+  animation: moving-gallery-scroll 55s linear infinite;
+}
+
+.people-scroll:hover .people-track {
+  animation-play-state: paused;
+}
+
 /* Animated frame badge — adapted from a Uiverse.io button: a dashed corner
  * frame draws in and four dots fly outward on hover. Kept in its original
  * neon palette (see AnimatedFrameBadge.tsx for why). */
