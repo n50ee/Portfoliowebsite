@@ -6,6 +6,7 @@ import { Card } from "../../components/brand/Card";
 import { Badge } from "../../components/brand/Badge";
 import { Tag } from "../../components/brand/Tag";
 import { MovingGallery } from "../../components/brand/MovingGallery";
+import { TournamentResultsTable } from "../../components/brand/TournamentResultsTable";
 import { getProjectDetail } from "../../lib/api/content.functions";
 
 export const Route = createFileRoute("/work/$slug")({
@@ -101,6 +102,13 @@ function CaseStudy() {
           ))}
         </div>
       </section>
+
+      {project.results.length > 0 && (
+        <section className="pb-24">
+          <h2 className="mb-6 font-display text-heading-md font-semibold text-ink-900">Detailed results</h2>
+          <TournamentResultsTable results={project.results} />
+        </section>
+      )}
 
       <Footer />
     </Container>

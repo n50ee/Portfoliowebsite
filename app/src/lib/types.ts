@@ -1,3 +1,11 @@
+export interface TournamentResult {
+  date: string;
+  place: string;
+  tier: string;
+  tournament: string;
+  prize: string;
+}
+
 export interface Project {
   id: number;
   slug: string;
@@ -16,6 +24,7 @@ export interface Project {
   status: string;
   sortOrder: number;
   published: boolean;
+  results: TournamentResult[];
   createdAt: string;
   updatedAt: string;
 }

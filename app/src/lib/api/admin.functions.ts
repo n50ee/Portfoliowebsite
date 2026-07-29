@@ -34,6 +34,17 @@ const projectInputSchema = z.object({
   status: z.string().trim().max(50),
   sortOrder: z.number(),
   published: z.boolean(),
+  results: z
+    .array(
+      z.object({
+        date: z.string().trim().max(20),
+        place: z.string().trim().max(20),
+        tier: z.string().trim().max(30),
+        tournament: z.string().trim().max(200),
+        prize: z.string().trim().max(30),
+      }),
+    )
+    .max(300),
 });
 
 export const adminCreateProject = createServerFn({ method: "POST" })

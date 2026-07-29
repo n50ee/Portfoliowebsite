@@ -1,5 +1,5 @@
 import { bindings } from "./bindings.server";
-import type { BlogPost, ContactMessage, Profile, Project } from "./types";
+import type { BlogPost, ContactMessage, Profile, Project, TournamentResult } from "./types";
 
 function db() {
   const { DB } = bindings();
@@ -37,6 +37,7 @@ type ProjectRow = {
   status: string;
   sort_order: number;
   published: number;
+  results: string;
   created_at: string;
   updated_at: string;
 };
@@ -60,6 +61,7 @@ function mapProject(row: ProjectRow): Project {
     status: row.status,
     sortOrder: row.sort_order,
     published: row.published === 1,
+    results: parseJsonObjectArray<TournamentResult>(row.results),
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -103,13 +105,14 @@ export interface ProjectInput {
   status: string;
   sortOrder: number;
   published: boolean;
+  results: TournamentResult[];
 }
 
 export async function createProject(input: ProjectInput): Promise<number> {
   const res = await db()
     .prepare(
-      `INSERT INTO projects (slug, title, client, description, body, tags, theme_accent, theme_tint, image_url, gallery, role, timeline, team, status, sort_order, published, updated_at)
-       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, datetime('now'))`,
+      `INSERT INTO projects (slug, title, client, description, body, tags, theme_accent, theme_tint, image_url, gallery, role, timeline, team, status, sort_order, published, results, updated_at)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, datetime('now'))`,
     )
     .bind(
       input.slug,
@@ -128,6 +131,7 @@ export async function createProject(input: ProjectInput): Promise<number> {
       input.status,
       input.sortOrder,
       input.published ? 1 : 0,
+      JSON.stringify(input.results),
     )
     .run();
   return Number(res.meta.last_row_id);
@@ -136,8 +140,8 @@ export async function createProject(input: ProjectInput): Promise<number> {
 export async function updateProject(id: number, input: ProjectInput): Promise<void> {
   await db()
     .prepare(
-      `UPDATE projects SET slug=?1, title=?2, client=?3, description=?4, body=?5, tags=?6, theme_accent=?7, theme_tint=?8, image_url=?9, gallery=?10, role=?11, timeline=?12, team=?13, status=?14, sort_order=?15, published=?16, updated_at=datetime('now')
-       WHERE id=?17`,
+      `UPDATE projects SET slug=?1, title=?2, client=?3, description=?4, body=?5, tags=?6, theme_accent=?7, theme_tint=?8, image_url=?9, gallery=?10, role=?11, timeline=?12, team=?13, status=?14, sort_order=?15, published=?16, results=?17, updated_at=datetime('now')
+       WHERE id=?18`,
     )
     .bind(
       input.slug,
@@ -156,6 +160,7 @@ export async function updateProject(id: number, input: ProjectInput): Promise<vo
       input.status,
       input.sortOrder,
       input.published ? 1 : 0,
+      JSON.stringify(input.results),
       id,
     )
     .run();

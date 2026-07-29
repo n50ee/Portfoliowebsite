@@ -3,7 +3,8 @@ import { Input, Textarea } from "../brand/Field";
 import { Button } from "../brand/Button";
 import { ImageField } from "./ImageField";
 import { GalleryField } from "./GalleryField";
-import type { Project } from "../../lib/types";
+import { ResultsField } from "./ResultsField";
+import type { Project, TournamentResult } from "../../lib/types";
 
 export interface ProjectFormValues {
   slug: string;
@@ -22,6 +23,7 @@ export interface ProjectFormValues {
   status: string;
   sortOrder: number;
   published: boolean;
+  results: TournamentResult[];
 }
 
 function toFormValues(project?: Project | null): ProjectFormValues {
@@ -42,6 +44,7 @@ function toFormValues(project?: Project | null): ProjectFormValues {
     status: project?.status ?? "Shipped",
     sortOrder: project?.sortOrder ?? 0,
     published: project?.published ?? true,
+    results: project?.results ?? [],
   };
 }
 
@@ -129,6 +132,11 @@ export function ProjectForm({
         label="Photo gallery (shown below the hero image)"
         value={values.gallery}
         onChange={(urls) => set("gallery", urls)}
+      />
+      <ResultsField
+        label="Tournament results (shown as a table on the case study)"
+        value={values.results}
+        onChange={(rows) => set("results", rows)}
       />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Input

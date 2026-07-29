@@ -1,0 +1,1 @@
+ALTER TABLE projects ADD COLUMN results TEXT NOT NULL DEFAULT '[]';
