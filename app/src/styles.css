@@ -754,10 +754,26 @@
 /* People row: same auto-scroll technique as the moving gallery, reusing its
  * keyframe, but sized for photo-card content (image + name/role text)
  * instead of bare images. */
+/* People strip: a real horizontal scroll container so it can be dragged and
+ * stepped with the arrow buttons; the drift is driven in JS (PeopleGrid)
+ * rather than a CSS animation, which scrollLeft cannot be nudged against. */
 .people-scroll {
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  cursor: grab;
   -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
   mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+
+.people-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.people-scroll.is-dragging {
+  cursor: grabbing;
+  user-select: none;
 }
 
 .people-track {
@@ -766,11 +782,6 @@
   gap: 16px;
   width: max-content;
   padding: 4px 0 14px;
-  animation: moving-gallery-scroll 55s linear infinite;
-}
-
-.people-scroll:hover .people-track {
-  animation-play-state: paused;
 }
 
 /* Animated frame badge — adapted from a Uiverse.io button: a dashed corner
