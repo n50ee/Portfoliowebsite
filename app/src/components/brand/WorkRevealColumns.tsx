@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { Link } from "@tanstack/react-router";
 
 export interface RevealItem {
@@ -17,7 +18,10 @@ export function WorkRevealColumns({ items }: { items: RevealItem[] }) {
   if (items.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-1 gap-px border border-line-soft bg-line-soft sm:grid-cols-2">
+    <div
+      className="grid grid-cols-1 gap-px border border-line-soft bg-line-soft sm:grid-cols-2 lg:[grid-template-columns:repeat(var(--reveal-cols),minmax(0,1fr))]"
+      style={{ "--reveal-cols": items.length } as CSSProperties}
+    >
       {items.map((item) => (
         <Link
           key={item.slug}
@@ -33,7 +37,7 @@ export function WorkRevealColumns({ items }: { items: RevealItem[] }) {
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-ink-900/85 via-ink-900/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-          <span className="relative font-display text-heading-md font-bold leading-tight text-ink-300 transition-colors duration-500 ease-out group-hover:text-paper sm:text-heading-lg">
+          <span className="relative font-display text-heading-md font-bold leading-tight text-ink-300 transition-colors duration-500 ease-out group-hover:text-paper sm:text-heading-lg lg:text-heading-md 2xl:text-heading-lg">
             {item.client}
           </span>
           <span className="absolute bottom-6 left-6 font-body text-body-sm font-semibold text-paper opacity-0 transition-opacity delay-100 duration-300 group-hover:opacity-100">
