@@ -3,7 +3,7 @@ import { clsx } from "clsx";
 
 export function Container({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={clsx("mx-auto max-w-[1200px] px-6", className)} {...props}>
+    <div className={clsx("w-full px-6 sm:px-10 lg:px-16", className)} {...props}>
       {children}
     </div>
   );

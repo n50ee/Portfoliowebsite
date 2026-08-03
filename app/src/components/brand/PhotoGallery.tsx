@@ -58,7 +58,7 @@ export function PhotoGallery({ groups }: { groups: PhotoGroup[] }) {
             transition={{ duration: reducedMotion ? 0 : 0.2 }}
             className="fixed inset-0 z-[400] overflow-y-auto bg-ink-900/95 p-6 sm:p-10"
           >
-            <div className="mx-auto max-w-5xl">
+            <div className="mx-auto max-w-[1600px]">
               <div className="mb-8 flex items-center justify-between">
                 <h2 className="font-display text-heading-md font-semibold text-paper">All photos</h2>
                 <button
