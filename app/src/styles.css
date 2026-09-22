@@ -754,34 +754,74 @@
 /* People row: same auto-scroll technique as the moving gallery, reusing its
  * keyframe, but sized for photo-card content (image + name/role text)
  * instead of bare images. */
-/* People strip: a real horizontal scroll container so it can be dragged and
- * stepped with the arrow buttons; the drift is driven in JS (PeopleGrid)
- * rather than a CSS animation, which scrollLeft cannot be nudged against. */
+/* People strip: a continuous, slow CSS marquee. The track holds the list
+ * twice and slides by -50% (one full set), so the wrap is seamless. Hovering
+ * the strip pauses the drift; hovering a card lifts and enlarges it. Gap is a
+ * per-card margin (not flex `gap`) so the -50% translate lands exactly on a
+ * card boundary, including the trailing gap — no jump at the loop point. */
 .people-scroll {
-  overflow-x: auto;
-  overflow-y: hidden;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-  cursor: grab;
+  overflow: hidden;
   -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
   mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
-}
-
-.people-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-.people-scroll.is-dragging {
-  cursor: grabbing;
-  user-select: none;
 }
 
 .people-track {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
   width: max-content;
   padding: 4px 0 14px;
+}
+
+.people-track > .people-card {
+  margin-right: 16px;
+}
+
+.people-track.is-marquee {
+  animation: people-marquee var(--people-duration, 90s) linear infinite;
+}
+
+.people-scroll:hover .people-track.is-marquee {
+  animation-play-state: paused;
+}
+
+@keyframes people-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Smooth hover lift on each card. The image also scales inside its clipped
+ * frame (group-hover in PeopleGrid), so the photo grows within its rounded
+ * border while the whole card rises slightly. */
+.people-card {
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.people-card:hover {
+  transform: translateY(-6px) scale(1.04);
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .people-track.is-marquee {
+    animation: none;
+  }
+  /* Keep the row browsable by hand when motion is reduced. */
+  .people-scroll {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .people-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .people-card:hover {
+    transform: scale(1.04);
+  }
 }
 
 /* Animated frame badge — adapted from a Uiverse.io button: a dashed corner
