@@ -14,7 +14,7 @@ function initials(name: string): string {
 const PLACEHOLDER_TINTS = ["bg-signature-100 text-signature-600", "bg-paper-sunken text-ink-700"];
 
 /** Pixels per frame the strip drifts on its own. */
-const DRIFT = 0.4;
+const DRIFT = 0.18;
 
 /**
  * Row of photo cards, one per person, that drifts on its own but can also be
